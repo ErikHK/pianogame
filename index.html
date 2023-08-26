@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html>
+  <style>
+
+	
+    html, body {
+      font-family: Arial, 'sans-serif';
+	  //display: flex;
+	  margin: 0 ;
+	  height: 100%;
+	  }
+	  
+	svg {
+	  align-self: center;
+	}
+	
+	#container{
+	  display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      //width: 200px;
+	  height: 100%;
+	}
+	  
+	#output2 {
+	  display: flex;
+	  justify-content: center;
+	  margin: 0 auto;
+	  align-self: center;
+	  height: 100%;
+    }
+	
+	#output {
+	  display: flex;
+	  justify-content: center;
+	  margin: 0 auto;
+	  align-self: center;
+	  height: 100%;
+    }
+	
+	.keylist {
+	  float: left;
+	  padding: 1em;
+	  display: block;
+	}
+	
+	.keylist > li {
+	  float:left;
+	  padding: 1em;
+	  display: block;
+	  text-align: center;
+	}
+	
+	
+	tr > td {
+	  display: block;
+	  text-align: center;
+	  float: left;
+	  padding: .3em;
+	}
+	
+	td > span {
+	display: block;
+	font-weight: bold;
+	}
+	
+	h1 {
+	text-align:center;
+	}
+	
+	fieldset {
+	  border-radius: 1em;
+	  margin-top: 2em;
+	  background-color: #eeffff;
+	  text-align: center;
+	}
+	
+	fieldset > table {
+	  text-align: center;
+	  margin: auto;
+	}
+	
+	td > input {
+	  width: 2em;
+	  height: 2em;
+	}
+	
+	#submit {
+	  padding: 1em;
+	  margin-top: 1em;
+	  border-radius: 1em;
+	}
+	
+  </style>
+  <body id="bod">
+    <div id="container">
+    <div id="output2">
+	<div id="outputt">
+      <h1>Piano game!</h1>
+	  <form method="get" action="game.html">
+	    
+		
+	    <fieldset>
+		<legend>Clefs</legend>
+		<table>
+		  <tr>
+		  
+		  <td><input type="checkbox" name="treble" value="" /><span>Treble</span></td>
+		  <td><input type="checkbox" name="bass" value="" /><span>Bass</span></td>
+		  </tr>
+		</table>
+		</fieldset>
+		
+	    <fieldset>
+		<legend>Chords</legend>
+		<table>
+		  <tr>
+		  
+		  <td><input type="checkbox" name="showchordnames" value="" /><span>Show chord names</span></td>
+		  <td><input type="checkbox" name="includechords" value="" /><span>Include chords</span></td>
+		  </tr>
+		</table>
+		</fieldset>
+		
+	    <fieldset>
+		  <legend>Major keys</legend>
+		  <table class="keylist">
+		  <tr>
+		  
+		  <td><input type="checkbox" name="majorkey" value="C" /><span>C</span></td>
+		  <td><input type="checkbox" name="majorkey" value="C#" /><span>C#</span></td>
+		  <td><input type="checkbox" name="majorkey" value="D" /><span>D</span></td>
+		  <td><input type="checkbox" name="majorkey" value="D#" /><span>D#</span></td>
+		  <td><input type="checkbox" name="majorkey" value="E" /><span>E</span></td>
+		  <td><input type="checkbox" name="majorkey" value="F" /><span>F</span></td>
+		  <td><input type="checkbox" name="majorkey" value="F#" /><span>F#</span></td>
+		  <td><input type="checkbox" name="majorkey" value="G" /><span>G</span></td>
+		  <td><input type="checkbox" name="majorkey" value="G#" /><span>G#</span></td>
+		  <td><input type="checkbox" name="majorkey" value="A" /><span>A</span></td>
+		  <td><input type="checkbox" name="majorkey" value="A#" /><span>A#</span></td>
+		  <td><input type="checkbox" name="majorkey" value="B" /><span>B</span></td>
+		  </tr>
+		  </table>
+		</fieldset>
+		
+		<fieldset>
+		  <legend>Minor keys</legend>
+		  <table class="keylist">
+		  <tr>
+		  
+		  <td><input type="checkbox" name="minorkey" value="C" /><span>C</span></td>
+		  <td><input type="checkbox" name="minorkey" value="C#" /><span>C#</span></td>
+		  <td><input type="checkbox" name="minorkey" value="D" /><span>D</span></td>
+		  <td><input type="checkbox" name="minorkey" value="D#" /><span>D#</span></td>
+		  <td><input type="checkbox" name="minorkey" value="E" /><span>E</span></td>
+		  <td><input type="checkbox" name="minorkey" value="F" /><span>F</span></td>
+		  <td><input type="checkbox" name="minorkey" value="F#" /><span>F#</span></td>
+		  <td><input type="checkbox" name="minorkey" value="G" /><span>G</span></td>
+		  <td><input type="checkbox" name="minorkey" value="G#" /><span>G#</span></td>
+		  <td><input type="checkbox" name="minorkey" value="A" /><span>A</span></td>
+		  <td><input type="checkbox" name="minorkey" value="A#" /><span>A#</span></td>
+		  <td><input type="checkbox" name="minorkey" value="B" /><span>B</span></td>
+		  </tr>
+		  </table>
+		</fieldset>
+		
+		<input id="submit" type="submit" value="Start game" />
+	  </form>
+  
+    </div>
+	</div>
+	</div>
+	
+  </body>
+</html>
