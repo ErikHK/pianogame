@@ -53,127 +53,61 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
     <script>
 	
-	  //URL parameters, game options
-	  const urlParams = new URLSearchParams(window.location.search);
+	//URL parameters, game options
+	const urlParams = new URLSearchParams(window.location.search);
 	  
-	  const NUMBARS = urlParams.get("numbars");
-	  const TREBLENOTEDURATION = urlParams.get("treblenoteduration");
+	//const NUMBARS = urlParams.get("numbars");
+	const NUMBARS = 2;
+	const TREBLENOTEDURATION = urlParams.get("treblenoteduration");
 	  
-	  const USETREBLE = urlParams.has("treble");
-	  const USEBASS = urlParams.has("bass");
-	  const USECHORDS = urlParams.has("includechords");  
-	  const RANDOMIZETREBLENOTES = urlParams.has("randomizetreblenotes");
-	  const RANDOMIZEBASSNOTES = urlParams.has("randomizebassnotes");
-	  const RANDOMIZETREBLECHORDINVERSIONS = urlParams.has("randomizetreblechordinv");
-	  const RANDOMIZEBASSCHORDINVERSIONS = urlParams.has("randomizebasschordinv");
+	const USETREBLE = urlParams.has("treble");
+	const USEBASS = urlParams.has("bass");
+	const USECHORDS = urlParams.has("includechords");  
+	const RANDOMIZETREBLENOTES = urlParams.has("randomizetreblenotes");
+	const RANDOMIZEBASSNOTES = urlParams.has("randomizebassnotes");
+	const RANDOMIZETREBLECHORDINVERSIONS = urlParams.has("randomizetreblechordinv");
+	const RANDOMIZEBASSCHORDINVERSIONS = urlParams.has("randomizebasschordinv");
 	  
+    const { Renderer, Stave, StaveNote, Voice, Formatter} = Vex.Flow;
+	const keyOfCChords = ["C", "Dm", "Em", "F", "G", "Am", "Bdim"];
+	
+	const SHARPS = "C C# D D# E F F# G G# A A# B".split(" ");
+    const FLATS = "C Db D Eb E F Gb G Ab A Bb B".split(" ");
+
 	
 	
-      const { Renderer, Stave, StaveNote, Voice, Formatter} = Vex.Flow;
+	function midiToNoteName(midi) {
+	  if (isNaN(midi) || midi === -Infinity || midi === Infinity) return "";
+	  midi = Math.round(midi);
+	  const pcs = SHARPS;
+	  const pc = pcs[midi % 12];
+	  //if (options.pitchClass) {
+	  //  return pc;
+	  //}
+	  const o = Math.floor(midi / 12) - 1;
+	  return pc + o;
+	}
 	  
-	  //keyOfCChords = [["C", ["C/4", "E/4", "G/4"]], ["Dm", ["D/4", "F/4", "A/4"]], ["Em", ["E/4", "G/4", "B/4"]], "F", "G", "Am", "Bdim"];
-	  //keyOfCChords = [["C", "C/4"], ["Dm", "D/4"], ["Em", "E/4"], ["F", "F/4"], ["G", "G/4"], ["Am", "A/4"], ["Bdim", "B/4"]];
-	  
-	  keyOfCChords = ["C", "Dm", "Em", "F", "G", "Am", "Bdim"];
-	  
-	  let drawFirstChord = true;
-	  let drawSecondChord = false;
-	  
-	  
-      // Create a renderer and attach it to the canvas element named "output".
-      const div = document.getElementById('output');
-      const renderer = new Renderer(div, Renderer.Backends.CANVAS);
-	  
-	  // Configure the rendering context.
-      renderer.resize(850, 400);
-      const context = renderer.getContext();
-	  
-      // Create a stave of width 400 at position 10, 80 on the canvas.
-      const stave = new Stave(10, 80, 400);
-	  
-	  const stave_bass = new Stave(10, 160, 400);
-	  
-      // Add a clef and time signature.
-      stave.addClef('treble').addTimeSignature('4/4');
-	  
-	  stave_bass.addClef('bass').addTimeSignature('4/4');
-	  
-	  //stave.addKeySignature('Bb');
+	function midimess(m)
+	{
+	  const [command, key, velocity] = m.data;
+	  console.log("HÄR KOMMER DATA");
+	  console.log(command);
+	  console.log(midiToNoteName(key));
+	}
 
-      // Connect it to the rendering context and draw!
-      stave.setContext(context).draw();
-	  stave_bass.setContext(context).draw();
-	  
-	  
-	  const testtt = document.getElementById("bod");
-	  testtt.addEventListener("keydown", logKey);
+	function connectToDevice(device) {
+	  console.log('Connecting to device', device);
+	  device.onmidimessage = function(m) {
+	    const [command, key, velocity] = m.data;
+	    console.log("HÄR KOMMER DATA");
+	    console.log(command);
+	    console.log(midiToNoteName(key));
+	  }
+	}
 
-	  console.log(navigator);
-	  
-	  
-	  
-	  if (navigator.requestMIDIAccess) {
-        console.log('This browser supports WebMIDI!');
-      } else {
-        console.log('WebMIDI is not supported in this browser.');
-      }
-
-      const SHARPS = "C C# D D# E F F# G G# A A# B".split(" ");
-      const FLATS = "C Db D Eb E F Gb G Ab A Bb B".split(" ");
-
-function midiToNoteName(midi) {
-  if (isNaN(midi) || midi === -Infinity || midi === Infinity) return "";
-  midi = Math.round(midi);
-  const pcs = SHARPS;
-  const pc = pcs[midi % 12];
-  //if (options.pitchClass) {
-  //  return pc;
-  //}
-  const o = Math.floor(midi / 12) - 1;
-  return pc + o;
-}
-
-
-	const list = document.getElementById('output2');
-const debugEl = document.getElementById('container');
-
-
-function midimess(m)
-{
-  const [command, key, velocity] = m.data;
-	console.log("HÄR KOMMER DATA");
-	console.log(command);
-	console.log(midiToNoteName(key));
-}
-
-function connectToDevice(device) {
-  console.log('Connecting to device', device);
-  device.onmidimessage = function(m) {
-    const [command, key, velocity] = m.data;
-	console.log("HÄR KOMMER DATA");
-	console.log(command);
-	console.log(midiToNoteName(key));
-    
-  }
-}
-
-navigator.requestMIDIAccess()
-    .then(function(access) {
-      console.log('access inputs', Array.from(access.inputs.values()));
-	  
-	  inputs = Array.from(access.inputs.values());
-	  
-	  if(inputs.length > 0)
-	    inputs[0].onmidimessage = function(m) {
-          const [command, key, velocity] = m.data;
-	  
-          console.log(midiToNoteName(key));
-        };
-
-});
-
-	  
-	  function logKey(e)
+	
+	function logKey(e)
 	  {
 		context.fillStyle="green";
 		
@@ -223,9 +157,9 @@ navigator.requestMIDIAccess()
 	    return [String.fromCharCode(offs), octaveoffs];
 	  }
 	  
+	  
 	  function randomizeChordFromRootNote(rootNote, octave)
 	  {
-	    
 		let thirdNote_ = nextLetter(rootNote,2);
 		let fifthNote_ = nextLetter(rootNote,4);
 		let eigthNote_ = nextLetter(rootNote,7);
@@ -259,229 +193,213 @@ navigator.requestMIDIAccess()
 		//console.log(returnation);
 		
 		return returnation[randInt(0,2)];
-	  }
-	  
-	  generateNewChords();
-	  
-	  
-	  var test1 = stave.x + stave.getModifierXShift(0);
-	  
-	  
-  function randInt(begin, end)
-  {
-    return Math.round(Math.random()*(end-begin)) + begin;
-  }
-  
-  function generateNewSingleNotes()
-  {
-    
-  }
-	  
-  function generateNewChords()
-  {
-    let numnotes = 0;
-	if(TREBLENOTEDURATION == 'w')
-	  numnotes = 1;
-	else if(TREBLENOTEDURATION == 'h')
-	  numnotes = 2;
-	else if(TREBLENOTEDURATION == 'q')
-	  numnotes = 4;
-	else if(TREBLENOTEDURATION == '8')
-	  numnotes = 8;
-	
-	treblenotes = [];
-	
-    for(let i = 0; i < numnotes*NUMBARS; i++)
-    {
-	  let randname = keyOfCChords[randInt(0,5)];
-	  let notename = randomizeChordFromRootNote(randname[0], 4);
-	  let note = new StaveNote({
-          keys: notename,
-          duration: TREBLENOTEDURATION,
-        })
-	
-	  if (urlParams.has("showtreblechordnames"))
-	    note.addModifier( new Vex.Flow.ChordSymbol().addText(randname));
-
-	  treblenotes.push(note);
 	}
-    
-	/*
-    //console.log("rand:", randInt(0,5));
-	let rand1name = keyOfCChords[randInt(0,5)];
-	let rand2name = keyOfCChords[randInt(0,5)];
-	let rand3name = keyOfCChords[randInt(0,5)];
-	let rand4name = keyOfCChords[randInt(0,5)];
-	
-	
-	//console.log("name:", rand1name);
-    notename1 = randomizeChordFromRootNote(rand1name[0], 4);
-    notename2 = randomizeChordFromRootNote(rand2name[0], 4);
-	notename3 = randomizeChordFromRootNote(rand3name[0], 4);
-	notename4 = randomizeChordFromRootNote(rand4name[0], 4);
-	
-    delete notes;
-    //test1 = 40;
-	
-	let note1 = new StaveNote({
-          keys: notename1,
-          duration: TREBLENOTEDURATION,
-        })
-	let note2 = new StaveNote({
-          keys: notename2,
-          duration: 'q',
-        })
-	let note3 = new StaveNote({
-          keys: notename3,
-          duration: 'q',
-        })
-	let note4 = new StaveNote({
-          keys: notename4,
-          duration: 'q',
-        })
-	
-	if (urlParams.has("showchordnames"))
+	  
+	  
+	function randInt(begin, end)
 	{
-	  note1.addModifier( new Vex.Flow.ChordSymbol().addText(rand1name));
+      return Math.round(Math.random()*(end-begin)) + begin;
+	}
+  
+	function generateNewSingleNotes()
+	{
+	  
+	}
+	  
+	function generateNewTrebleChords()
+	{
+		let numnotes = 4;
+		if(TREBLENOTEDURATION == 'w')
+		  numnotes = 1;
+		else if(TREBLENOTEDURATION == 'h')
+		  numnotes = 2;
+		else if(TREBLENOTEDURATION == 'q')
+		  numnotes = 4;
+		else if(TREBLENOTEDURATION == '8')
+		  numnotes = 8;
+		
+		treblenotes = [];
+		
+		for(let i = 0; i < numnotes*NUMBARS; i++)
+		{
+		  let randname = keyOfCChords[randInt(0,5)];
+		  let notename = randomizeChordFromRootNote(randname[0], 4);
+		  let note = new StaveNote({
+			  keys: notename,
+			  duration: TREBLENOTEDURATION,
+			})
+		
+		  if (urlParams.has("showtreblechordnames"))
+			note.addModifier( new Vex.Flow.ChordSymbol().addText(randname));
 
-	  note2.addModifier( new Vex.Flow.ChordSymbol().addText(rand2name));
-
-	  note3.addModifier( new Vex.Flow.ChordSymbol().addText(rand3name));
-
-	  note4.addModifier( new Vex.Flow.ChordSymbol().addText(rand4name));
-    }
+		  treblenotes.push(note);
+		}
+		
+		return treblenotes;
+	}
 	
 	
-	notes = [note1, note2, note3, note4];
-	*/
-	delete voice;
 	
-	voice = new Voice({
-        num_beats: 4,
-        beat_value: 4,
-		});
+	function animate()
+	{
+	  // clear canvas
+	  context.clearRect(0,20,500, 25);
+	  //context.clearRect(0,0,500,500);
+	  //context.fillStyle = "#66ff66";
+	  //countdown
+	  //context.fillRect(test1, 20, stave.getWidth()-test1+stave.x, 20);
+	  //context.fillStyle = "black";
+	  
+	  //test1 += 1;
+	  
+	  //generate new notes!
+	  //if (test1 > stave.getWidth())
+	  //{
+		//generateNewChords();
+	  //}
 	  
 	  
-	  //voice.setStrict(false);
-      voice.addTickables(treblenotes.slice(0, treblenotes.length/2));
+	  //if (test1 > 330)
+	  //{
+		//test1 = 40;
+		//voice.tickables[3].setStyle({ fillStyle: 'blue', strokeStyle: 'blue' });
+		
+	  //}
+	  //else
+	  //{
+		//voice.tickables[3].setStyle({ fillStyle: 'black', strokeStyle: 'black' });
+	  //}
 	  
-	  voice2 = new Voice({
-        num_beats: 4,
-        beat_value: 4,
-		});
-		
-      voice_bass = new Voice({
-        num_beats: 4,
-        beat_value: 4,
-		});
-		
-		
-		
-	let note5 = new StaveNote({
-          keys: ["C/4"],
-          duration: 'q',
-        })
-		
+	  // call again next time we can draw
+	  requestAnimationFrame(animate);
+	  //setInterval(animate, 10);
+	  
+	}
+	
+	function drawStaves()
+	{
+	
+	
+	}
+	
+	
+	
+      // Create a renderer and attach it to the canvas element named "output".
+      const div = document.getElementById('output');
+      const renderer = new Renderer(div, Renderer.Backends.CANVAS);
+	  
+	  // Configure the rendering context.
+      renderer.resize(850, 400);
+      const context = renderer.getContext();
+	  
+      // Create a stave of width 400 at position 10, 80 on the canvas.
+      let trebleStaves = [];
 
-		
-	let bassnote1 = new StaveNote({
-		  clef: "bass",
-          keys: ["C/3"],
-          duration: 'h',
-        });
-		
-	let bassnote2 = new StaveNote({
-		  clef: "bass",
-          keys: ["E/3"],
-          duration: 'h',
-        });
-		
-		
-		
-      voice2.addTickables(treblenotes.slice(treblenotes.length/2));
+	  trebleStaves.push(  new Stave(10, 80, 400)  );
+	  if(NUMBARS > 1)
+	    trebleStaves.push(  new Stave(trebleStaves[0].width + 10, 80, 400)  );
+	    
 	  
-	  notes3 = [bassnote1, bassnote2];
+	  let bassStaves = [];
 	  
-	  voice_bass.addTickables(notes3);
+	  bassStaves.push(new Stave(10, 160, 400));
+	  if(NUMBARS > 1)
+	    bassStaves.push(  new Stave(bassStaves[0].width + 10, 160, 400)  );
+	  
+	  
+      // Add a clef and time signature.
+      trebleStaves[0].addClef('treble').addTimeSignature('4/4');
+	  
+	  bassStaves[0].addClef('bass').addTimeSignature('4/4');
+	  
+	  //stave.addKeySignature('Bb');
 
-	  stave2 = new Stave(stave.width + stave.x, 80, 400);
-	  stave2.setContext(context).draw();
-      // Format and justify the notes to 400 pixels.
-      //new Formatter().joinVoices([voice, voice2]).format([voice, voice2], 350);
-	  Formatter.FormatAndDraw(context, stave, treblenotes.slice(0, treblenotes.length/2));
-	  Formatter.FormatAndDraw(context, stave2, treblenotes.slice(treblenotes.length/2));
-	  Formatter.FormatAndDraw(context, stave_bass, notes3);
+      // Connect it to the rendering context and draw!
+      trebleStaves[0].setContext(context).draw();
+      trebleStaves[1].setContext(context).draw();
+	  
+      bassStaves[0].setContext(context).draw();
+      bassStaves[1].setContext(context).draw();
+	  //stave_bass.setContext(context).draw();
 	  
 	  
-	//context.clearRect(test1-10,0,test1+50, 45);
+	  //const testtt = document.getElementById("bod");
+	  //testtt.addEventListener("keydown", logKey);
+
+	  //console.log(navigator);
+	  
+	  if (navigator.requestMIDIAccess) {
+        console.log('This browser supports WebMIDI!');
+      } else {
+        console.log('WebMIDI is not supported in this browser.');
+      }
+
+	navigator.requestMIDIAccess()
+    .then(function(access) {
+      console.log('access inputs', Array.from(access.inputs.values()));
+	  
+	  inputs = Array.from(access.inputs.values());
+	  
+	  if(inputs.length > 0)
+	    inputs[0].onmidimessage = function(m) {
+          const [command, key, velocity] = m.data;
+	  
+          console.log(midiToNoteName(key));
+        };
+
+	});
+
+	
+	
+	treblenotes = generateNewTrebleChords();
+	//bassnotes = generateNewBassChords();
+	
+	treblevoices = [];
+	bassvoices = [];
+	
+	treblevoices.push( new Voice({
+        num_beats: 4,
+        beat_value: 4,
+		}));
+		
+	
+	treblevoices.push( new Voice({
+        num_beats: 4,
+        beat_value: 4,
+		}));
+	
+	treblevoices[0].addTickables(treblenotes.slice(0, treblenotes.length/2));
+	treblevoices[1].addTickables(treblenotes.slice(treblenotes.length/2));
+	
+	Formatter.FormatAndDraw(context, trebleStaves[0], treblenotes.slice(0, treblenotes.length/2));
+	Formatter.FormatAndDraw(context, trebleStaves[1], treblenotes.slice(treblenotes.length/2));
+	
+	//drawStaves();
+
 	context.clearRect(0, 0, 840, 400);
-	stave.draw();
-	stave2.draw();
-    test1 = stave.x + stave.getModifierXShift(0);
-	voice.draw(context, stave);
-	voice2.draw(context, stave2);
 	
-
+	if(USETREBLE)
+	{
+	  trebleStaves[0].draw();
+	  trebleStaves[1].draw();
+	  
+	  treblevoices[0].draw(context, trebleStaves[0]);
+      treblevoices[1].draw(context, trebleStaves[1]);
+	}
+	
 	if(USEBASS)
 	{
-	  stave_bass.draw();
-	  voice_bass.draw(context, stave_bass);
-	}
-  }  
+	  bassStaves[0].draw();
+	  bassStaves[1].draw();
 	  
-  function animate() {
-  
-  // clear canvas
-  context.clearRect(0,20,500, 25);
-  //context.clearRect(0,0,500,500);
-  context.fillStyle = "#66ff66";
-  //countdown
-  context.fillRect(test1, 20, stave.getWidth()-test1+stave.x, 20);
-  context.fillStyle = "black";
-  
-  
-  if(drawFirstChord)
-  {
-  }
-  
-  test1 += 1;
-  
-  
-  
-  
-  //generate new notes!
-  if (test1 > stave.getWidth())
-  {
-    generateNewChords();
-	drawFirstChord = true;
-  }
-  
-  
-  if (test1 > 330)
-  {
-    //test1 = 40;
-	//voice.tickables[3].setStyle({ fillStyle: 'blue', strokeStyle: 'blue' });
+	  
+	}
+	
     
-  }
-  else
-  {
-	//voice.tickables[3].setStyle({ fillStyle: 'black', strokeStyle: 'black' });
-  }
-  
-  
-  // call again next time we can draw
-  requestAnimationFrame(animate);
-  //setInterval(animate, 10);
-  
-  }
-  
-   
-   
-  //ctx.fillStyle = '#000';
-  //ctx.fillText('click to add random rects', 10, 10);
 
 
-animate();
+
+	animate();
 
     </script>
   </body>
