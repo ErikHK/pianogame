@@ -42,6 +42,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  height: 100%;
     }
   </style>
+  <title>Piano Game</title>
   <body id="bod">
     <div id="container">
     <div id="output2"><canvas id="output"></canvas></div>
@@ -94,10 +95,12 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  console.log(urlParams.getAll("majorkey"));
 	  console.log(urlParams.has("includechords"));
 	  
-	  const NUMNOTES = urlParams.get("numnotes");
+	  const NUMBARS = urlParams.get("numbars");
+	  const NOTEDURATION = urlParams.get("noteduration");
 	  
 	  const USETREBLE = urlParams.has("treble");
 	  const USEBASS = urlParams.has("bass");
+	  const USECHORDS = urlParams.has("includechords");  
 	  
 	  
 	  

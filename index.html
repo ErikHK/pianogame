@@ -7,7 +7,7 @@
     html, body {
       font-family: Arial, 'sans-serif';
 	  //display: flex;
-	  margin: 0 ;
+	  margin: 0;
 	  height: 100%;
 	  }
 	  
@@ -45,11 +45,15 @@
 	  display: block;
 	}
 	
-	.keylist > li {
-	  float:left;
-	  padding: 1em;
-	  display: block;
-	  text-align: center;
+	ul {
+	  list-style: none;
+	  text-align: left;
+	  padding-left: 1em;
+	  
+	}
+	
+	ul > li {
+	  font-weight: bold;
 	}
 	
 	
@@ -86,13 +90,33 @@
 	  height: 2em;
 	}
 	
+	li > input {
+	  width: 2em;
+	  height: 2em;
+	  vertical-align: bottom;
+	}
+	
+	li {
+	  height: 2em;
+	  line-height: 2em;
+	}
+	
+	span.cw {
+	  margin-left: 1em;
+	}
+	
 	#submit {
 	  padding: 1em;
 	  margin-top: 1em;
 	  border-radius: 1em;
 	}
 	
+	span.n {
+	  display: inline;
+	}
+	
   </style>
+  <title>Piano Game</title>
   <body id="bod">
     <div id="container">
     <div id="output2">
@@ -106,8 +130,8 @@
 		<table>
 		  <tr>
 		  
-		  <td><input type="checkbox" name="treble" value="" /><span>Treble</span></td>
-		  <td><input type="checkbox" name="bass" value="" /><span>Bass</span></td>
+		  <td><span>Treble</span><input type="checkbox" name="treble" value="" checked /></td>
+		  <td><span>Bass</span><input type="checkbox" name="bass" value="" /></td>
 		  </tr>
 		</table>
 		</fieldset>
@@ -117,8 +141,35 @@
 		<table>
 		  <tr>
 		  
-		  <td><input type="checkbox" name="showchordnames" value="" /><span>Show chord names</span></td>
-		  <td><input type="checkbox" name="includechords" value="" /><span>Include chords</span></td>
+		  <td><span>Include chords</span><input type="checkbox" name="includechords" value="" /></td>
+		  <td><span>Show chord names</span><input type="checkbox" name="showchordnames" value="" /></td>
+		  </tr>
+		</table>
+		</fieldset>
+		
+		
+		<fieldset>
+		<legend>Notes</legend>
+		<table>
+		  <tr>
+		  
+		  <td><span>Note duration</span> 
+		    <select>
+		      <option value="w">Whole notes</option>
+			  <option value="h">Half notes</option>
+			  <option value="q" selected>Quarter notes</option>
+			  <option value="8">Eighth notes</option>
+			  </select></td>
+			  
+		  <td><span>Number of bars</span>
+		    <select>
+		      <option value="1">1</option>
+			  <option value="2" selected>2</option>
+			  <option value="3">3</option>
+			  </select></td>
+			  
+		  
+		  </td>
 		  </tr>
 		</table>
 		</fieldset>
@@ -128,7 +179,7 @@
 		  <table class="keylist">
 		  <tr>
 		  
-		  <td><input type="checkbox" name="majorkey" value="C" /><span>C</span></td>
+		  <td><input type="checkbox" name="majorkey" value="C" checked /><span>C</span></td>
 		  <td><input type="checkbox" name="majorkey" value="C#" /><span>C#</span></td>
 		  <td><input type="checkbox" name="majorkey" value="D" /><span>D</span></td>
 		  <td><input type="checkbox" name="majorkey" value="D#" /><span>D#</span></td>
@@ -164,6 +215,46 @@
 		  </tr>
 		  </table>
 		</fieldset>
+		
+		
+		<!--
+	    <fieldset>
+		  <legend>Randomization</legend>
+		  <table class="keylist">
+		  <tr>
+		  <td><span class="n">Randomize:</span> </td>
+		  <tr>
+		   <td><span class="n">Treble:</span><input type="checkbox" name="randomizetreble" value="" checked /> </td>
+		  <tr>
+		  <td><span class="n">Bass:</span> <input type="checkbox" name="randomizebass" value="" checked /> </td>
+		  <tr>
+		  <td><span class="n">Chord inversions:</span> <input type="checkbox" name="randomizechordinv" value="" checked /> </td>
+		  </tr>
+		  </table>
+		</fieldset>
+		-->
+		
+		
+		<fieldset>
+		  <legend>Randomization</legend>
+		  <ul>
+		  <li>Randomize:</li>
+		    <ul>
+			<li><input type="checkbox" /><span class="cw">Treble</span></li>
+			  <ul>
+			  <li><input type="checkbox" /><span class="cw">Notes</span></li>
+			  <li><input type="checkbox" /><span class="cw">Chord inversions</span></li>
+			  </ul>
+            <li><input type="checkbox" /><span class="cw">Bass</span></li>
+			  <ul>
+			  <li><input type="checkbox" /><span class="cw">Notes</span></li>
+			  <li><input type="checkbox" /><span class="cw">Chord inversions</span></li>
+			  </ul>
+            </ul>			
+		  
+		  </ul>
+		</fieldset>
+		
 		
 		<input id="submit" type="submit" value="Start game" />
 	  </form>
