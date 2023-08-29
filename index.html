@@ -141,8 +141,8 @@
 		<table>
 		  <tr>
 		  
-		  <td><span>Include chords</span><input type="checkbox" name="includechords" value="" /></td>
-		  <td><span>Show chord names</span><input type="checkbox" name="showchordnames" value="" /></td>
+		  <td><span>Include chords</span><input type="checkbox" name="includetreblechords" value="" /></td>
+		  <td><span>Show chord names</span><input type="checkbox" name="showtreblechordnames" value="" /></td>
 		  </tr>
 		</table>
 		</fieldset>
@@ -154,7 +154,7 @@
 		  <tr>
 		  
 		  <td><span>Note duration</span> 
-		    <select>
+		    <select name="treblenoteduration">
 		      <option value="w">Whole notes</option>
 			  <option value="h">Half notes</option>
 			  <option value="q" selected>Quarter notes</option>
@@ -162,7 +162,7 @@
 			  </select></td>
 			  
 		  <td><span>Number of bars</span>
-		    <select>
+		    <select name="numbars">
 		      <option value="1">1</option>
 			  <option value="2" selected>2</option>
 			  <option value="3">3</option>
@@ -240,15 +240,15 @@
 		  <ul>
 		  <li>Randomize:</li>
 		    <ul>
-			<li><input type="checkbox" /><span class="cw">Treble</span></li>
+			<li><input type="checkbox" name="randomize" /><span class="cw">Treble</span></li>
 			  <ul>
-			  <li><input type="checkbox" /><span class="cw">Notes</span></li>
-			  <li><input type="checkbox" /><span class="cw">Chord inversions</span></li>
+			  <li><input type="checkbox" name="randomizetreblenotes" /><span class="cw">Notes</span></li>
+			  <li><input type="checkbox" name="randomizetreblechordinv" /><span class="cw">Chord inversions</span></li>
 			  </ul>
             <li><input type="checkbox" /><span class="cw">Bass</span></li>
 			  <ul>
-			  <li><input type="checkbox" /><span class="cw">Notes</span></li>
-			  <li><input type="checkbox" /><span class="cw">Chord inversions</span></li>
+			  <li><input type="checkbox" name="randomizebassnotes" /><span class="cw">Notes</span></li>
+			  <li><input type="checkbox" name="randomizebasschordinv" /><span class="cw">Chord inversions</span></li>
 			  </ul>
             </ul>			
 		  

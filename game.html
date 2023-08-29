@@ -41,6 +41,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  align-self: center;
 	  height: 100%;
     }
+	
   </style>
   <title>Piano Game</title>
   <body id="bod">
@@ -51,6 +52,23 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	<script src="vexflow.js"></script>
 	
     <script>
+	
+	  //URL parameters, game options
+	  const urlParams = new URLSearchParams(window.location.search);
+	  
+	  const NUMBARS = urlParams.get("numbars");
+	  const TREBLENOTEDURATION = urlParams.get("treblenoteduration");
+	  
+	  const USETREBLE = urlParams.has("treble");
+	  const USEBASS = urlParams.has("bass");
+	  const USECHORDS = urlParams.has("includechords");  
+	  const RANDOMIZETREBLENOTES = urlParams.has("randomizetreblenotes");
+	  const RANDOMIZEBASSNOTES = urlParams.has("randomizebassnotes");
+	  const RANDOMIZETREBLECHORDINVERSIONS = urlParams.has("randomizetreblechordinv");
+	  const RANDOMIZEBASSCHORDINVERSIONS = urlParams.has("randomizebasschordinv");
+	  
+	
+	
       const { Renderer, Stave, StaveNote, Voice, Formatter} = Vex.Flow;
 	  
 	  //keyOfCChords = [["C", ["C/4", "E/4", "G/4"]], ["Dm", ["D/4", "F/4", "A/4"]], ["Em", ["E/4", "G/4", "B/4"]], "F", "G", "Am", "Bdim"];
@@ -91,16 +109,6 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  testtt.addEventListener("keydown", logKey);
 
 	  console.log(navigator);
-	  const urlParams = new URLSearchParams(window.location.search);
-	  console.log(urlParams.getAll("majorkey"));
-	  console.log(urlParams.has("includechords"));
-	  
-	  const NUMBARS = urlParams.get("numbars");
-	  const NOTEDURATION = urlParams.get("noteduration");
-	  
-	  const USETREBLE = urlParams.has("treble");
-	  const USEBASS = urlParams.has("bass");
-	  const USECHORDS = urlParams.has("includechords");  
 	  
 	  
 	  
@@ -271,6 +279,34 @@ navigator.requestMIDIAccess()
 	  
   function generateNewChords()
   {
+    let numnotes = 0;
+	if(TREBLENOTEDURATION == 'w')
+	  numnotes = 1;
+	else if(TREBLENOTEDURATION == 'h')
+	  numnotes = 2;
+	else if(TREBLENOTEDURATION == 'q')
+	  numnotes = 4;
+	else if(TREBLENOTEDURATION == '8')
+	  numnotes = 8;
+	
+	treblenotes = [];
+	
+    for(let i = 0; i < numnotes*NUMBARS; i++)
+    {
+	  let randname = keyOfCChords[randInt(0,5)];
+	  let notename = randomizeChordFromRootNote(randname[0], 4);
+	  let note = new StaveNote({
+          keys: notename,
+          duration: TREBLENOTEDURATION,
+        })
+	
+	  if (urlParams.has("showtreblechordnames"))
+	    note.addModifier( new Vex.Flow.ChordSymbol().addText(randname));
+
+	  treblenotes.push(note);
+	}
+    
+	/*
     //console.log("rand:", randInt(0,5));
 	let rand1name = keyOfCChords[randInt(0,5)];
 	let rand2name = keyOfCChords[randInt(0,5)];
@@ -289,7 +325,7 @@ navigator.requestMIDIAccess()
 	
 	let note1 = new StaveNote({
           keys: notename1,
-          duration: 'q',
+          duration: TREBLENOTEDURATION,
         })
 	let note2 = new StaveNote({
           keys: notename2,
@@ -317,7 +353,7 @@ navigator.requestMIDIAccess()
 	
 	
 	notes = [note1, note2, note3, note4];
-	  
+	*/
 	delete voice;
 	
 	voice = new Voice({
@@ -327,7 +363,7 @@ navigator.requestMIDIAccess()
 	  
 	  
 	  //voice.setStrict(false);
-      voice.addTickables(notes);
+      voice.addTickables(treblenotes.slice(0, treblenotes.length/2));
 	  
 	  voice2 = new Voice({
         num_beats: 4,
@@ -346,18 +382,7 @@ navigator.requestMIDIAccess()
           duration: 'q',
         })
 		
-	  let note6 = new StaveNote({
-          keys: notename1,
-          duration: 'q',
-        })
-	let note7 = new StaveNote({
-          keys: notename2,
-          duration: 'q',
-        })
-	let note8 = new StaveNote({
-          keys: notename3,
-          duration: 'q',
-        })
+
 		
 	let bassnote1 = new StaveNote({
 		  clef: "bass",
@@ -373,8 +398,7 @@ navigator.requestMIDIAccess()
 		
 		
 		
-      notes2 = [note5, note6, note7, note8];
-      voice2.addTickables(notes2);
+      voice2.addTickables(treblenotes.slice(treblenotes.length/2));
 	  
 	  notes3 = [bassnote1, bassnote2];
 	  
@@ -384,8 +408,8 @@ navigator.requestMIDIAccess()
 	  stave2.setContext(context).draw();
       // Format and justify the notes to 400 pixels.
       //new Formatter().joinVoices([voice, voice2]).format([voice, voice2], 350);
-	  Formatter.FormatAndDraw(context, stave, notes);
-	  Formatter.FormatAndDraw(context, stave2, notes2);
+	  Formatter.FormatAndDraw(context, stave, treblenotes.slice(0, treblenotes.length/2));
+	  Formatter.FormatAndDraw(context, stave2, treblenotes.slice(treblenotes.length/2));
 	  Formatter.FormatAndDraw(context, stave_bass, notes3);
 	  
 	  
