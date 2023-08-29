@@ -66,20 +66,24 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
       const renderer = new Renderer(div, Renderer.Backends.CANVAS);
 	  
 	  // Configure the rendering context.
-      renderer.resize(440, 200);
+      renderer.resize(850, 400);
       const context = renderer.getContext();
 	  
       // Create a stave of width 400 at position 10, 80 on the canvas.
       const stave = new Stave(10, 80, 400);
 	  
+	  const stave_bass = new Stave(10, 160, 400);
 	  
       // Add a clef and time signature.
       stave.addClef('treble').addTimeSignature('4/4');
+	  
+	  stave_bass.addClef('bass').addTimeSignature('4/4');
 	  
 	  //stave.addKeySignature('Bb');
 
       // Connect it to the rendering context and draw!
       stave.setContext(context).draw();
+	  stave_bass.setContext(context).draw();
 	  
 	  
 	  const testtt = document.getElementById("bod");
@@ -89,6 +93,12 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  const urlParams = new URLSearchParams(window.location.search);
 	  console.log(urlParams.getAll("majorkey"));
 	  console.log(urlParams.has("includechords"));
+	  
+	  const NUMNOTES = urlParams.get("numnotes");
+	  
+	  const USETREBLE = urlParams.has("treble");
+	  const USEBASS = urlParams.has("bass");
+	  
 	  
 	  
 	  if (navigator.requestMIDIAccess) {
@@ -249,7 +259,12 @@ navigator.requestMIDIAccess()
   function randInt(begin, end)
   {
     return Math.round(Math.random()*(end-begin)) + begin;
-  }  
+  }
+  
+  function generateNewSingleNotes()
+  {
+    
+  }
 	  
   function generateNewChords()
   {
@@ -286,7 +301,6 @@ navigator.requestMIDIAccess()
           duration: 'q',
         })
 	
-	
 	if (urlParams.has("showchordnames"))
 	{
 	  note1.addModifier( new Vex.Flow.ChordSymbol().addText(rand1name));
@@ -309,20 +323,83 @@ navigator.requestMIDIAccess()
 		});
 	  
 	  
+	  //voice.setStrict(false);
       voice.addTickables(notes);
-
-      // Format and justify the notes to 400 pixels.
-      //new Formatter().joinVoices([voice]).format([voice], 350);
-	  Formatter.FormatAndDraw(context, stave, notes);
 	  
-	//Formatter.joinVoices([voice]).format([voice], 350);
+	  voice2 = new Voice({
+        num_beats: 4,
+        beat_value: 4,
+		});
+		
+      voice_bass = new Voice({
+        num_beats: 4,
+        beat_value: 4,
+		});
+		
+		
+		
+	let note5 = new StaveNote({
+          keys: ["C/4"],
+          duration: 'q',
+        })
+		
+	  let note6 = new StaveNote({
+          keys: notename1,
+          duration: 'q',
+        })
+	let note7 = new StaveNote({
+          keys: notename2,
+          duration: 'q',
+        })
+	let note8 = new StaveNote({
+          keys: notename3,
+          duration: 'q',
+        })
+		
+	let bassnote1 = new StaveNote({
+		  clef: "bass",
+          keys: ["C/3"],
+          duration: 'h',
+        });
+		
+	let bassnote2 = new StaveNote({
+		  clef: "bass",
+          keys: ["E/3"],
+          duration: 'h',
+        });
+		
+		
+		
+      notes2 = [note5, note6, note7, note8];
+      voice2.addTickables(notes2);
+	  
+	  notes3 = [bassnote1, bassnote2];
+	  
+	  voice_bass.addTickables(notes3);
+
+	  stave2 = new Stave(stave.width + stave.x, 80, 400);
+	  stave2.setContext(context).draw();
+      // Format and justify the notes to 400 pixels.
+      //new Formatter().joinVoices([voice, voice2]).format([voice, voice2], 350);
+	  Formatter.FormatAndDraw(context, stave, notes);
+	  Formatter.FormatAndDraw(context, stave2, notes2);
+	  Formatter.FormatAndDraw(context, stave_bass, notes3);
+	  
 	  
 	//context.clearRect(test1-10,0,test1+50, 45);
-	context.clearRect(0, 0, 440, 200);
+	context.clearRect(0, 0, 840, 400);
 	stave.draw();
+	stave2.draw();
     test1 = stave.x + stave.getModifierXShift(0);
 	voice.draw(context, stave);
+	voice2.draw(context, stave2);
 	
+
+	if(USEBASS)
+	{
+	  stave_bass.draw();
+	  voice_bass.draw(context, stave_bass);
+	}
   }  
 	  
   function animate() {
