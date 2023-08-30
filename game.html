@@ -90,6 +90,8 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	const GNotes = "G A B C D E F".split(" ");
 	const GNotesAccidentals = ["", "", "", "", "", "", "#"];
 	
+	const CNotesAccidentals = ["", "", "", "", "", "", ""];
+	
 	const SHARPS = "C C# D D# E F F# G G# A A# B".split(" ");
     const FLATS = "C Db D Eb E F Gb G Ab A Bb B".split(" ");
 
@@ -101,9 +103,9 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	let currentIndex = 0;
 	
-	let currentKeyNotes = GNotes;
-	let currentKeyAccidentals = GNotesAccidentals;
-	let currentKeyChords = keyOfGChords;
+	let currentKeyNotes = CNotes;
+	let currentKeyAccidentals = CNotesAccidentals;
+	let currentKeyChords = keyOfCChords;
 	
 	function midiToNoteName(midi) {
 	  if (isNaN(midi) || midi === -Infinity || midi === Infinity) return "";
@@ -279,6 +281,30 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		return treblenotes;
 	}
 	
+	function generateNewTrebleVoices()
+	{
+	    treblevoices = [];
+		treblevoices.push( new Voice({
+			num_beats: 4,
+			beat_value: 4,
+			}));
+			
+		
+		treblevoices.push( new Voice({
+			num_beats: 4,
+			beat_value: 4,
+			}));
+		
+		treblevoices[0].addTickables(treblenotes.slice(0, treblenotes.length/2));
+		treblevoices[1].addTickables(treblenotes.slice(treblenotes.length/2));
+		
+		Formatter.FormatAndDraw(context, trebleStaves[0], treblenotes.slice(0, treblenotes.length/2));
+		Formatter.FormatAndDraw(context, trebleStaves[1], treblenotes.slice(treblenotes.length/2));
+		
+		return treblevoices;
+	}
+	
+	
 	//clear and redraw staves, voices etc
 	function reDraw()
 	{
@@ -336,7 +362,10 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		context.fillRect(0,22,20,20);
 		treblenotes[currentIndex].success = true;
 		
-		treblevoices[0].tickables[currentIndex].setStyle({ fillStyle: 'lightgreen', strokeStyle: 'lightgreen' });
+		if(currentIndex < 4)
+		  treblevoices[0].tickables[currentIndex].setStyle({ fillStyle: 'lightgreen', strokeStyle: 'lightgreen' });
+		else
+		  treblevoices[1].tickables[currentIndex - 4].setStyle({ fillStyle: 'lightgreen', strokeStyle: 'lightgreen' });
 		reDraw();
 		
 	    //treblevoices[0].draw(context, trebleStaves[0]);
@@ -344,7 +373,16 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		
 		currentIndex += 1;
 	}
-  
+	
+	//console.log(currentIndex);
+	if(currentIndex == 8)
+	{
+	  console.log("SUCCESS");
+	  currentIndex = 0;
+	  treblenotes = generateNewTrebleChords();
+	  treblevoices = generateNewTrebleVoices();
+	  reDraw();
+    }
 	  
 	  //if (test1 > 330)
 	  //{
@@ -451,32 +489,16 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 
 	
 	
-	treblenotes = generateNewTrebleChords();
+	treblevoices = [];
+	bassvoices = [];
 	
+	treblenotes = generateNewTrebleChords();
+	treblevoices = generateNewTrebleVoices();
 	
 	console.log(treblenotes[0].keys);
 	
 	//bassnotes = generateNewBassChords();
 	
-	treblevoices = [];
-	bassvoices = [];
-	
-	treblevoices.push( new Voice({
-        num_beats: 4,
-        beat_value: 4,
-		}));
-		
-	
-	treblevoices.push( new Voice({
-        num_beats: 4,
-        beat_value: 4,
-		}));
-	
-	treblevoices[0].addTickables(treblenotes.slice(0, treblenotes.length/2));
-	treblevoices[1].addTickables(treblenotes.slice(treblenotes.length/2));
-	
-	Formatter.FormatAndDraw(context, trebleStaves[0], treblenotes.slice(0, treblenotes.length/2));
-	Formatter.FormatAndDraw(context, trebleStaves[1], treblenotes.slice(treblenotes.length/2));
 	
 	//drawStaves();
 
