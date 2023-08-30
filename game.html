@@ -69,7 +69,26 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	const RANDOMIZEBASSCHORDINVERSIONS = urlParams.has("randomizebasschordinv");
 	  
     const { Renderer, Stave, StaveNote, Voice, Formatter} = Vex.Flow;
+	
 	const keyOfCChords = ["C", "Dm", "Em", "F", "G", "Am", "Bdim"];
+	const keyOfCSChords = "C# D#m Fm F# G# A#m Cdim".split(" ");
+	const keyOfDChords = "D Em F#m G A C#dim".split(" ");
+	const keyOfDSChords = "D# Fm Gm G# A# Ddim".split(" ");
+	const keyOfEChords = "E F#m G#m A B D#dim".split(" ");
+	const keyOfFChords = "F Gm Am A# C Edim".split(" ");
+	const keyOfFSChords = "F# G#m A#m B C# Fdim".split(" ");
+	const keyOfGChords = "G Am Bm C D F#dim".split(" ");
+	const keyOfGSChords = "G# A#m Cm C# D# Gdim".split(" ");
+	const keyOfAChords = "A Bm C#m D E G#dim".split(" ");
+	const keyOfASChords = "A# Cm Dm D# F Adim".split(" ");
+	const keyOfBChords = "B C#m D#m E F# A#dim".split(" ");
+	
+	
+	const CNotes = "C D E F G A B".split(" ");
+	const CSNotes = "C# D# F etc".split(" ");
+	
+	const GNotes = "G A B C D E F".split(" ");
+	const GNotesAccidentals = ["", "", "", "", "", "", "#"];
 	
 	const SHARPS = "C C# D D# E F F# G G# A A# B".split(" ");
     const FLATS = "C Db D Eb E F Gb G Ab A Bb B".split(" ");
@@ -81,6 +100,10 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	let heldkeys = [];
 	
 	let currentIndex = 0;
+	
+	let currentKeyNotes = GNotes;
+	let currentKeyAccidentals = GNotesAccidentals;
+	let currentKeyChords = keyOfGChords;
 	
 	function midiToNoteName(midi) {
 	  if (isNaN(midi) || midi === -Infinity || midi === Infinity) return "";
@@ -170,16 +193,20 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		let eigthNote_ = nextLetter(rootNote,7);
 		let tenthNote_ = nextLetter(rootNote,9);
 		
+		let ind = currentKeyNotes.indexOf(rootNote);
+		console.log("HEHE");
+		console.log(rootNote);
+		console.log(ind);
 		
-		let rootNoteS = rootNote + "/" + octave;
+		let rootNoteS = rootNote + currentKeyAccidentals[ind + 0] + "/" + octave;
 		
-		let thirdNoteS = thirdNote_[0] + "/" + String(octave + thirdNote_[1]);
+		let thirdNoteS = thirdNote_[0] + currentKeyAccidentals[(ind + 2) % 7] + "/" + String(octave + thirdNote_[1]);
 		
-		let fifthNoteS = fifthNote_[0] + "/" + String(octave + fifthNote_[1]);
+		let fifthNoteS = fifthNote_[0] + currentKeyAccidentals[(ind + 4) % 7] + "/" + String(octave + fifthNote_[1]);
 		
-		let eigthNoteS = eigthNote_[0] + "/" + String(octave + eigthNote_[1]);
+		let eigthNoteS = eigthNote_[0] + currentKeyAccidentals[(ind + 0) % 7] + "/" + String(octave + eigthNote_[1]);
 		
-		let tenthNoteS = tenthNote_[0] + "/" + String(octave + tenthNote_[1]);
+		let tenthNoteS = tenthNote_[0] + currentKeyAccidentals[(ind + 2) % 7] + "/" + String(octave + tenthNote_[1]);
 		
 		
 		//returnation = [[rootNoteS, thirdNoteS, fifthNoteS],
@@ -227,8 +254,10 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		
 		for(let i = 0; i < numnotes*NUMBARS; i++)
 		{
-		  let randname = keyOfCChords[randInt(0,5)];
+		  let randname = currentKeyChords[randInt(0,5)];
 		  let notename = randomizeChordFromRootNote(randname[0], 4);
+		  
+		  console.log(notename);
 		  
 		  //if playing only single notes then splice
 		  if(!USECHORDS)
