@@ -62,7 +62,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  
 	const USETREBLE = urlParams.has("treble");
 	const USEBASS = urlParams.has("bass");
-	const USECHORDS = urlParams.has("includechords");  
+	const USECHORDS = urlParams.has("includetreblechords");  
 	const RANDOMIZETREBLENOTES = urlParams.has("randomizetreblenotes");
 	const RANDOMIZEBASSNOTES = urlParams.has("randomizebassnotes");
 	const RANDOMIZETREBLECHORDINVERSIONS = urlParams.has("randomizetreblechordinv");
@@ -229,12 +229,17 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		{
 		  let randname = keyOfCChords[randInt(0,5)];
 		  let notename = randomizeChordFromRootNote(randname[0], 4);
+		  
+		  //if playing only single notes then splice
+		  if(!USECHORDS)
+		    notename = [notename[0]];
+			
 		  let note = new StaveNote({
 			  keys: notename,
 			  duration: TREBLENOTEDURATION,
 			})
 		
-		  if (urlParams.has("showtreblechordnames"))
+		  if (urlParams.has("showtreblechordnames") && USECHORDS)
 			note.addModifier( new Vex.Flow.ChordSymbol().addText(randname));
 
 		  //set success value to false
