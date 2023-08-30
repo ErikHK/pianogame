@@ -59,10 +59,12 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	//const NUMBARS = urlParams.get("numbars");
 	const NUMBARS = 2;
 	const TREBLENOTEDURATION = urlParams.get("treblenoteduration");
+	const BASSNOTEDURATION = urlParams.get("bassnoteduration");
 	  
 	const USETREBLE = urlParams.has("treble");
 	const USEBASS = urlParams.has("bass");
-	const USECHORDS = urlParams.has("includetreblechords");  
+	const USETREBLECHORDS = urlParams.has("includetreblechords");  
+	const USEBASSCHORDS = urlParams.has("includebasschords");  
 	const RANDOMIZETREBLENOTES = urlParams.has("randomizetreblenotes");
 	const RANDOMIZEBASSNOTES = urlParams.has("randomizebassnotes");
 	const RANDOMIZETREBLECHORDINVERSIONS = urlParams.has("randomizetreblechordinv");
@@ -239,6 +241,49 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	{
 	  
 	}
+	
+	function generateNewBassChords()
+	{
+		let numnotes = 4;
+		if(BASSNOTEDURATION == 'w')
+		  numnotes = 1;
+		else if(BASSNOTEDURATION == 'h')
+		  numnotes = 2;
+		else if(BASSNOTEDURATION == 'q')
+		  numnotes = 4;
+		else if(BASSNOTEDURATION == '8')
+		  numnotes = 8;
+		
+		bassnotes = [];
+		
+		for(let i = 0; i < numnotes*NUMBARS; i++)
+		{
+		  let randname = currentKeyChords[randInt(0,5)];
+		  let notename = randomizeChordFromRootNote(randname[0], 3);
+		  
+		  console.log(notename);
+		  
+		  //if playing only single notes then splice
+		  if(!USEBASSCHORDS)
+		    notename = [notename[0]];
+			
+		  let note = new StaveNote({
+		      clef: "bass",
+			  keys: notename,
+			  duration: BASSNOTEDURATION,
+			})
+		
+		  if (urlParams.has("showtreblechordnames") && USEBASSCHORDS)
+			note.addModifier( new Vex.Flow.ChordSymbol().addText(randname));
+
+		  //set success value to false
+		  note.success = false;
+		  bassnotes.push(note);
+		}
+		
+		return bassnotes;
+		
+	}
 	  
 	function generateNewTrebleChords()
 	{
@@ -262,7 +307,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		  console.log(notename);
 		  
 		  //if playing only single notes then splice
-		  if(!USECHORDS)
+		  if(!USETREBLECHORDS)
 		    notename = [notename[0]];
 			
 		  let note = new StaveNote({
@@ -270,7 +315,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 			  duration: TREBLENOTEDURATION,
 			})
 		
-		  if (urlParams.has("showtreblechordnames") && USECHORDS)
+		  if (urlParams.has("showtreblechordnames") && USETREBLECHORDS)
 			note.addModifier( new Vex.Flow.ChordSymbol().addText(randname));
 
 		  //set success value to false
@@ -280,6 +325,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		
 		return treblenotes;
 	}
+	
 	
 	function generateNewTrebleVoices()
 	{
@@ -304,6 +350,29 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		return treblevoices;
 	}
 	
+	function generateNewBassVoices()
+	{
+	    bassvoices = [];
+		bassvoices.push( new Voice({
+			num_beats: 4,
+			beat_value: 4,
+			}));
+			
+		
+		bassvoices.push( new Voice({
+			num_beats: 4,
+			beat_value: 4,
+			}));
+		
+		bassvoices[0].addTickables(bassnotes.slice(0, bassnotes.length/2));
+		bassvoices[1].addTickables(bassnotes.slice(bassnotes.length/2));
+		
+		Formatter.FormatAndDraw(context, bassStaves[0], bassnotes.slice(0, bassnotes.length/2));
+		Formatter.FormatAndDraw(context, bassStaves[1], bassnotes.slice(bassnotes.length/2));
+		
+		return bassvoices;
+	}
+	
 	
 	//clear and redraw staves, voices etc
 	function reDraw()
@@ -326,6 +395,8 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		  bassStaves[1].draw();
 		  
 		  
+		  bassvoices[0].draw(context, bassStaves[0]);
+		  bassvoices[1].draw(context, bassStaves[1]);
 		}
 		
 	}
@@ -356,16 +427,27 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		
 	  
 	  //check if correct keys are held!
+	notes = treblenotes[currentIndex].keys;
 	
-	if(arraysEqual(heldkeys, treblenotes[currentIndex].keys))
+	if(USEBASS)
+	  notes = notes.concat(bassnotes[currentIndex].keys);
+	  
+	if(arraysEqual(heldkeys, notes))
 	{
 		context.fillRect(0,22,20,20);
 		treblenotes[currentIndex].success = true;
 		
 		if(currentIndex < 4)
+		{
 		  treblevoices[0].tickables[currentIndex].setStyle({ fillStyle: 'lightgreen', strokeStyle: 'lightgreen' });
+		  bassvoices[0].tickables[currentIndex].setStyle({ fillStyle: 'lightgreen', strokeStyle: 'lightgreen' });
+		}
 		else
+		{
 		  treblevoices[1].tickables[currentIndex - 4].setStyle({ fillStyle: 'lightgreen', strokeStyle: 'lightgreen' });
+		  bassvoices[1].tickables[currentIndex - 4].setStyle({ fillStyle: 'lightgreen', strokeStyle: 'lightgreen' });
+		}
+		
 		reDraw();
 		
 	    //treblevoices[0].draw(context, trebleStaves[0]);
@@ -503,7 +585,8 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	console.log(treblenotes[0].keys);
 	
-	//bassnotes = generateNewBassChords();
+	bassnotes = generateNewBassChords();
+	bassvoices = generateNewBassVoices();
 	
 	
 	//drawStaves();
@@ -525,6 +608,8 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  bassStaves[1].draw();
 	  
 	  
+	  bassvoices[0].draw(context, bassStaves[0]);
+      bassvoices[1].draw(context, bassStaves[1]);
 	}
 	
     
