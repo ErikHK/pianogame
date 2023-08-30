@@ -69,6 +69,10 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	const RANDOMIZEBASSNOTES = urlParams.has("randomizebassnotes");
 	const RANDOMIZETREBLECHORDINVERSIONS = urlParams.has("randomizetreblechordinv");
 	const RANDOMIZEBASSCHORDINVERSIONS = urlParams.has("randomizebasschordinv");
+	
+	const TREBLEOCTAVERANGE = [parseInt(urlParams.get("trebleoctaverangefrom")), parseInt(urlParams.get("trebleoctaverangeto"))];
+	  
+	const BASSOCTAVERANGE = [parseInt(urlParams.get("bassoctaverangefrom")), parseInt(urlParams.get("bassoctaverangeto"))];
 	  
     const { Renderer, Stave, StaveNote, Voice, Formatter} = Vex.Flow;
 	
@@ -205,9 +209,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		let tenthNote_ = nextLetter(rootNote,9);
 		
 		let ind = currentKeyNotes.indexOf(rootNote);
-		console.log("HEHE");
-		console.log(rootNote);
-		console.log(ind);
+		
 		
 		let rootNoteS = rootNote + currentKeyAccidentals[ind + 0] + "/" + octave;
 		
@@ -241,6 +243,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  
 	function randInt(begin, end)
 	{
+	
       return Math.round(Math.random()*(end-begin)) + begin;
 	}
   
@@ -266,7 +269,8 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		for(let i = 0; i < numnotes*NUMBARS; i++)
 		{
 		  let randname = currentKeyChords[randInt(0,5)];
-		  let notename = randomizeChordFromRootNote(randname[0], 3);
+		  
+		  let notename = randomizeChordFromRootNote(randname[0], randInt(BASSOCTAVERANGE[0], BASSOCTAVERANGE[1]));
 		  
 		  console.log(notename);
 		  
@@ -309,7 +313,9 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		for(let i = 0; i < numnotes*NUMBARS; i++)
 		{
 		  let randname = currentKeyChords[randInt(0,5)];
-		  let notename = randomizeChordFromRootNote(randname[0], 4);
+		  console.log("hehe range", TREBLEOCTAVERANGE, randInt(3,4));
+		  
+		  let notename = randomizeChordFromRootNote(randname[0], randInt(TREBLEOCTAVERANGE[0], TREBLEOCTAVERANGE[1]));
 		  
 		  console.log(notename);
 		  
@@ -525,8 +531,9 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  
 	  bassStaves[0].addClef('bass').addTimeSignature('4/4');
 	  
-	  //stave.addKeySignature('Bb');
+	  trebleStaves[0].addKeySignature('A');
 
+	  bassStaves[0].addKeySignature('A');
       // Connect it to the rendering context and draw!
       trebleStaves[0].setContext(context).draw();
       trebleStaves[1].setContext(context).draw();
@@ -556,8 +563,6 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  if(inputs.length > 0)
 	    inputs[0].onmidimessage = function(m) {
           const [command, key, velocity] = m.data;
-		  
-		  console.log("HEJHEJHEJHEJHEHJH");
 		  
 		  let keyname = midiToNoteName(key);
 	  
