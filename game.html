@@ -74,6 +74,11 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	const SHARPS = "C C# D D# E F F# G G# A A# B".split(" ");
     const FLATS = "C Db D Eb E F Gb G Ab A Bb B".split(" ");
 
+	let treblenotes = [];
+	
+	let bassnotes = [];
+	
+	let heldkeys = [];
 	
 	
 	function midiToNoteName(midi) {
@@ -87,25 +92,6 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  const o = Math.floor(midi / 12) - 1;
 	  return pc + o;
 	}
-	  
-	function midimess(m)
-	{
-	  const [command, key, velocity] = m.data;
-	  console.log("HÄR KOMMER DATA");
-	  console.log(command);
-	  console.log(midiToNoteName(key));
-	}
-
-	function connectToDevice(device) {
-	  console.log('Connecting to device', device);
-	  device.onmidimessage = function(m) {
-	    const [command, key, velocity] = m.data;
-	    console.log("HÄR KOMMER DATA");
-	    console.log(command);
-	    console.log(midiToNoteName(key));
-	  }
-	}
-
 	
 	function logKey(e)
 	  {
@@ -259,6 +245,9 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  //}
 	  
 	  
+	  if(heldkeys.length > 0)
+		console.log(heldkeys)
+	  
 	  //if (test1 > 330)
 	  //{
 		//test1 = 40;
@@ -343,8 +332,21 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  if(inputs.length > 0)
 	    inputs[0].onmidimessage = function(m) {
           const [command, key, velocity] = m.data;
+		  
+		  let keyname = midiToNoteName(key);
 	  
-          console.log(midiToNoteName(key));
+          console.log(keyname);
+		  
+		  
+		  //remove from heldkeys
+		  let keyind = heldkeys.indexOf(keyname);
+		  if(keyind != -1)
+		    heldkeys.splice(keyind, 1);
+			
+		  
+		  //add to heldkeys
+		  if(velocity > 0)
+		    heldkeys.push(keyname);
         };
 
 	});
