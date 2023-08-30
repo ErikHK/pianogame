@@ -87,10 +87,17 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	
 	const CNotes = "C D E F G A B".split(" ");
-	const CSNotes = "C# D# F etc".split(" ");
+	//const CSNotes = "C# D# F etc".split(" ");
 	
+	const FNotes = "F G A A C D E".split(" ");
 	const GNotes = "G A B C D E F".split(" ");
+	const ANotes = "A B C D E F G".split(" ");
+	const DNotes = "D E F G A B C".split(" ");
+	
+	const DNotesAccidentals = ["", "", "#", "", "", "", "#"];
+	const FNotesAccidentals = ["", "", "#", "", "", "", ""];
 	const GNotesAccidentals = ["", "", "", "", "", "", "#"];
+	const ANotesAccidentals = ["", "", "#", "", "", "#", "#"];
 	
 	const CNotesAccidentals = ["", "", "", "", "", "", ""];
 	
@@ -105,9 +112,9 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	let currentIndex = 0;
 	
-	let currentKeyNotes = CNotes;
-	let currentKeyAccidentals = CNotesAccidentals;
-	let currentKeyChords = keyOfCChords;
+	let currentKeyNotes = ANotes;
+	let currentKeyAccidentals = ANotesAccidentals;
+	let currentKeyChords = keyOfAChords;
 	
 	function midiToNoteName(midi) {
 	  if (isNaN(midi) || midi === -Infinity || midi === Infinity) return "";
@@ -425,7 +432,6 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  //if(heldkeys.length > 0)
 		//console.log(heldkeys)
 		
-	  
 	  //check if correct keys are held!
 	notes = treblenotes[currentIndex].keys;
 	
