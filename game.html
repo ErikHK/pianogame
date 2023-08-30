@@ -351,8 +351,8 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  //}
 	  
 	  
-	  if(heldkeys.length > 0)
-		console.log(heldkeys)
+	  //if(heldkeys.length > 0)
+		//console.log(heldkeys)
 		
 	  
 	  //check if correct keys are held!
@@ -469,20 +469,26 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	    inputs[0].onmidimessage = function(m) {
           const [command, key, velocity] = m.data;
 		  
+		  console.log("HEJHEJHEJHEJHEHJH");
+		  
 		  let keyname = midiToNoteName(key);
 	  
           console.log(keyname);
-		  
+		  console.log(command, key, velocity);
+		  console.log(heldkeys);
 		  
 		  //remove from heldkeys
 		  let keyind = heldkeys.indexOf(keyname);
+		  console.log(keyind);
 		  if(keyind != -1)
 		    heldkeys.splice(keyind, 1);
 			
 		  
 		  //add to heldkeys
-		  if(velocity > 0)
+		  if(velocity > 0 && command == 144)
 		    heldkeys.push(keyname);
+			
+		  console.log(heldkeys);
         };
 
 	});
