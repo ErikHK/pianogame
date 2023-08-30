@@ -80,6 +80,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	let heldkeys = [];
 	
+	let currentIndex = 0;
 	
 	function midiToNoteName(midi) {
 	  if (isNaN(midi) || midi === -Infinity || midi === Infinity) return "";
@@ -90,7 +91,25 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  //  return pc;
 	  //}
 	  const o = Math.floor(midi / 12) - 1;
-	  return pc + o;
+	  return pc + "/" + o;
+	}
+	
+	function arraysEqual(a, b) {
+	  a.sort();
+	  b.sort();
+	  if (a === b) return true;
+	  if (a == null || b == null) return false;
+	  if (a.length !== b.length) return false;
+
+	  // If you don't care about the order of the elements inside
+	  // the array, you should sort both arrays here.
+	  // Please note that calling sort on an array will modify that array.
+	  // you might want to clone your array first.
+
+	  for (var i = 0; i < a.length; ++i) {
+		if (a[i] !== b[i]) return false;
+	  }
+	  return true;
 	}
 	
 	function logKey(e)
@@ -218,10 +237,37 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		  if (urlParams.has("showtreblechordnames"))
 			note.addModifier( new Vex.Flow.ChordSymbol().addText(randname));
 
+		  //set success value to false
+		  note.success = false;
 		  treblenotes.push(note);
 		}
 		
 		return treblenotes;
+	}
+	
+	//clear and redraw staves, voices etc
+	function reDraw()
+	{
+		// clear canvas
+     	context.clearRect(0,0,840, 400);
+	  
+		  if(USETREBLE)
+		{
+		  trebleStaves[0].draw();
+		  trebleStaves[1].draw();
+		  
+		  treblevoices[0].draw(context, trebleStaves[0]);
+		  treblevoices[1].draw(context, trebleStaves[1]);
+		}
+		
+		if(USEBASS)
+		{
+		  bassStaves[0].draw();
+		  bassStaves[1].draw();
+		  
+		  
+		}
+		
 	}
 	
 	
@@ -247,6 +293,24 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  
 	  if(heldkeys.length > 0)
 		console.log(heldkeys)
+		
+	  
+	  //check if correct keys are held!
+	
+	if(arraysEqual(heldkeys, treblenotes[currentIndex].keys))
+	{
+		context.fillRect(0,22,20,20);
+		treblenotes[currentIndex].success = true;
+		
+		treblevoices[0].tickables[currentIndex].setStyle({ fillStyle: 'lightgreen', strokeStyle: 'lightgreen' });
+		reDraw();
+		
+	    //treblevoices[0].draw(context, trebleStaves[0]);
+		console.log(treblenotes);
+		
+		currentIndex += 1;
+	}
+  
 	  
 	  //if (test1 > 330)
 	  //{
@@ -354,6 +418,10 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	
 	treblenotes = generateNewTrebleChords();
+	
+	
+	console.log(treblenotes[0].keys);
+	
 	//bassnotes = generateNewBassChords();
 	
 	treblevoices = [];
