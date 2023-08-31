@@ -72,16 +72,21 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	const keyOfCChords = ["C", "Dm", "Em", "F", "G", "Am", "Bdim"];
 	const keyOfCSChords = "C# D#m Fm F# G# A#m Cdim".split(" ");
-	const keyOfDChords = "D Em F#m G A C#dim".split(" ");
-	const keyOfDSChords = "D# Fm Gm G# A# Ddim".split(" ");
-	const keyOfEChords = "E F#m G#m A B D#dim".split(" ");
-	const keyOfFChords = "F Gm Am A# C Edim".split(" ");
-	const keyOfFSChords = "F# G#m A#m B C# Fdim".split(" ");
-	const keyOfGChords = "G Am Bm C D F#dim".split(" ");
-	const keyOfGSChords = "G# A#m Cm C# D# Gdim".split(" ");
-	const keyOfAChords = "A Bm C#m D E G#dim".split(" ");
-	const keyOfASChords = "A# Cm Dm D# F Adim".split(" ");
-	const keyOfBChords = "B C#m D#m E F# A#dim".split(" ");
+	const keyOfDChords = "D Em F#m G A Bm C#dim".split(" ");
+	const keyOfDSChords = "D# Fm Gm G# A# Cm Ddim".split(" ");
+	const keyOfEChords = "E F#m G#m A B C#m D#dim".split(" ");
+	const keyOfFChords = "F Gm Am A# C Dm Edim".split(" ");
+	const keyOfFSChords = "F# G#m A#m B C# D#m Fdim".split(" ");
+	const keyOfGChords = "G Am Bm C D Em F#dim".split(" ");
+	const keyOfGSChords = "G# A#m Cm C# D# Fm Gdim".split(" ");
+	const keyOfAChords = "A Bm C#m D E F#m G#dim".split(" ");
+	const keyOfASChords = "A# Cm Dm D# F Gm Adim".split(" ");
+	const keyOfBChords = "B C#m D#m E F# G#m A#dim".split(" ");
+	
+	
+	const allChordsSharp = [keyOfCChords, keyOfCSChords, keyOfDChords, keyOfDSChords,
+							keyOfEChords, keyOfFChords, keyOfFSChords, keyOfGChords,
+							keyOfGSChords, keyOfAChords, keyOfASChords, keyOfBChords];
 	
 	
 	const CNotes = "C D E F G A B".split(" ");
@@ -102,8 +107,13 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	const SHARPS = "C C# D D# E F F# G G# A A# B".split(" ");
     const FLATS = "C Db D Eb E F Gb G Ab A Bb B".split(" ");
 
-	
 	let heldkeys = [];
+	
+	let randKey = randInt(0, 11);
+	let randChord = randInt(0, 5);
+	
+	let currentChord = allChordsSharp[randKey][randChord];
+	let currentChordNotes = [];
 	
 	let currentKeyNotes = ANotes;
 	let currentKeyAccidentals = ANotesAccidentals;
@@ -165,6 +175,11 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	}
 	
 	
+	function newChord()
+	{
+	  return 
+	}
+	
 	function animate()
 	{
 	  ctx.clearRect(0,0,450, 100);
@@ -173,12 +188,12 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  ctx.fillStyle = "#000";
 	  
 	  
-	  ctx.fillText("hehehehe", 225, 50);
+	  ctx.fillText(currentChord, 225, 50);
 	  
 	  // clear canvas
-	  context.clearRect(0,0,450, 400);
+	  context.clearRect(0,0,450, 250);
 	  context.fillStyle = "#dedede";
-	  context.fillRect(0,0,450,400);
+	  context.fillRect(0,0,450,250);
 	  context.fillStyle = "#000";
 	  
 	  drawNotes();  
@@ -195,22 +210,22 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
       const renderer = new Renderer(canvas2, Renderer.Backends.CANVAS);
 	  
 	  // Configure the rendering context.
-      renderer.resize(450, 300);
+      renderer.resize(450, 250);
       const context = renderer.getContext();
 	  
 	  const ctx = canvas1.getContext('2d');
 	  
 	  
-      let trebleStave = new Stave(25, 80, 400);
-	  let bassStave = new Stave(25, 160, 400);
+      let trebleStave = new Stave(25, 20, 400);
+	  let bassStave = new Stave(25, 100, 400);
 	  
       trebleStave.addClef('treble');
 	  
 	  bassStave.addClef('bass');
 	  
-	  trebleStave.addKeySignature('A');
+	  //trebleStave.addKeySignature('A');
 
-	  bassStave.addKeySignature('A');
+	  //bassStave.addKeySignature('A');
 	  
       // Connect it to the rendering context and draw!
       trebleStave.setContext(context).draw();
@@ -278,7 +293,8 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	//initialize shit!!
 	
 			
-	ctx.font = "50px Arial";
+	ctx.font = "bold 50px Verdana";
+	
 	
 	ctx.textAlign = "center";
 	ctx.textBaseline = "middle";
