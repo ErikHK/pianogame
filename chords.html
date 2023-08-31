@@ -20,33 +20,27 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	#container{
 	  display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      //width: 200px;
-	  height: 100%;
+	  align-items: center;
+	  justify-content: center;
+	  height: 100vh;
 	}
 	  
-	#output2 {
-	  display: flex;
-	  justify-content: center;
-	  margin: 0 auto;
-	  align-self: center;
-	  height: 100%;
+	#canvas1div {
+	  display: block;
+	  float: none;
     }
 	
-	#output {
-	  display: flex;
-	  justify-content: center;
-	  margin: 0 auto;
-	  align-self: center;
-	  height: 100%;
+	#canvas2div {
+	  display: block;
+	  float: none;
     }
 	
   </style>
   <title>Piano Game</title>
   <body id="bod">
     <div id="container">
-    <div id="output2"><canvas id="output"></canvas></div>
+    <div id="canvas1div"><canvas id="canvas1" width="450" height="100"></canvas>
+    <div id="canvas2div"><canvas id="canvas2" width="450" height="300"></canvas></div>
 	</div>
 	
 	<script src="vexflow.js"></script>
@@ -171,9 +165,16 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	}
 	
 	
-	
 	function animate()
 	{
+	  ctx.clearRect(0,0,450, 100);
+	  ctx.fillStyle = "#ffdddddd";
+	  ctx.fillRect(0,0,450, 100);
+	  ctx.fillStyle = "#000";
+	  
+	  
+	  ctx.fillText("hehehehe", 225, 50);
+	  
 	  // clear canvas
 	  context.clearRect(0,0,450, 400);
 	  context.fillStyle = "#dedede";
@@ -182,9 +183,6 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  
 	  drawNotes();  
 	  
-	  context.fillText("hehe", 200, 100);
-	  
-	  context.fillText("hehe", 200, 200);
 	  // call again next time we can draw
 	  requestAnimationFrame(animate);
 	  //setInterval(animate, 10);
@@ -192,12 +190,16 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	}
 	
       // Create a renderer and attach it to the canvas element named "output".
-      const div = document.getElementById('output');
-      const renderer = new Renderer(div, Renderer.Backends.CANVAS);
+      const canvas1 = document.getElementById('canvas1');
+      const canvas2 = document.getElementById('canvas2');
+      const renderer = new Renderer(canvas2, Renderer.Backends.CANVAS);
 	  
 	  // Configure the rendering context.
-      renderer.resize(450, 400);
-      const context = renderer.getContext('2d');
+      renderer.resize(450, 300);
+      const context = renderer.getContext();
+	  
+	  const ctx = canvas1.getContext('2d');
+	  
 	  
       let trebleStave = new Stave(25, 80, 400);
 	  let bassStave = new Stave(25, 160, 400);
@@ -276,24 +278,11 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	//initialize shit!!
 	
 			
-	context.font = "bold 40px Arial";
-	context.textAlign = "center";
+	ctx.font = "50px Arial";
 	
-	const baselines = ['top', 'hanging', 'middle', 'alphabetic', 'ideographic', 'bottom'];
-context.font = '36px serif';
-context.strokeStyle = 'red';
-
-baselines.forEach(function (baseline, index) {
-  context.textBaseline = baseline;
-  let y = 75 + index * 75;
-  context.beginPath();
-  context.moveTo(0, y + 0.5);
-  context.lineTo(550, y + 0.5);
-  context.stroke();
-  context.fillText('Abcdefghijklmnop (' + baseline + ')', 0, y);
-});
-	
-	//animate();
+	ctx.textAlign = "center";
+	ctx.textBaseline = "middle";
+	animate();
 
     </script>
   </body>
