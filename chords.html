@@ -223,13 +223,25 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		
 		let chordName = chord;
 		
-		
+		let randig = Math.random();
 		//first inversion
-		if(Math.random() > .5)
+		if(randig < .33)
 		{
 		  console.log("WARNING SHUFFLING");
 		  let first = chordNotes_.shift();
 		  chordNotes_.push(first);
+		  
+		  chordName = chord + "/" + chordNotes_[0];
+		  console.log("new chord name: ", chordName);
+		}else if(randig < .66 && randig > .33)
+		{
+		  console.log("WARNING SHUFFLING");
+		  let first = chordNotes_.shift();
+		  chordNotes_.push(first);
+		  
+		  first = chordNotes_.shift();
+		  chordNotes_.push(first);
+		  
 		  
 		  chordName = chord + "/" + chordNotes_[0];
 		  console.log("new chord name: ", chordName);
