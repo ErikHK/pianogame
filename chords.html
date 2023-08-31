@@ -189,6 +189,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	let currentChordNotes = [];
 	let currentRootNote = "";
 	let currentChordName = "";
+	let currentKeySignature = "C";
 	
 	function hashToS(str)
 	{
@@ -209,7 +210,11 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	function newChord()
 	{	  
 		
+		//select random key
 		let keyKey = MAJORKEYS[Math.random() * MAJORKEYS.length | 0];
+		
+		currentKeySignature = allChordsCircleOfFifths[keyKey][0];
+		
 		let keyChord = randInt(0, 5);
 		
 		let chord = allChordsCircleOfFifths[keyKey][keyChord];
@@ -225,7 +230,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		
 		let randig = Math.random();
 		//first inversion
-		if(randig < .33)
+		if(randig < .2)
 		{
 		  console.log("WARNING SHUFFLING");
 		  let first = chordNotes_.shift();
@@ -233,7 +238,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		  
 		  chordName = chord + "/" + chordNotes_[0];
 		  console.log("new chord name: ", chordName);
-		}else if(randig < .66 && randig > .33)
+		}else if(randig < .4 && randig > .2)
 		{
 		  console.log("WARNING SHUFFLING");
 		  let first = chordNotes_.shift();
@@ -363,7 +368,9 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  
 	  bassStave.addClef('bass');
 	  
-	  //trebleStave.addKeySignature('A');
+	  trebleStave.addKeySignature(currentKeySignature);
+	  
+	  bassStave.addKeySignature(currentKeySignature);
 
 	  //bassStave.addKeySignature('A');
 	  
