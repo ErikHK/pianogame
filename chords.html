@@ -75,7 +75,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	const keyOfDChords = "D Em F#m G A Bm C#dim".split(" ");
 	const keyOfDSChords = "D# Fm Gm G# A# Cm Ddim".split(" ");
 	const keyOfEChords = "E F#m G#m A B C#m D#dim".split(" ");
-	const keyOfFChords = "F Gm Am A# C Dm Edim".split(" ");
+	const keyOfFChords = "F Gm Am Bb C Dm Edim".split(" ");
 	const keyOfFSChords = "F# G#m A#m B C# D#m Fdim".split(" ");
 	const keyOfGChords = "G Am Bm C D Em F#dim".split(" ");
 	const keyOfGSChords = "G# A#m Cm C# D# Fm Gdim".split(" ");
@@ -83,10 +83,81 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	const keyOfASChords = "A# Cm Dm D# F Gm Adim".split(" ");
 	const keyOfBChords = "B C#m D#m E F# G#m A#dim".split(" ");
 	
+	const chordNotes = {
+	C: "C E G".split(" "),
 	
-	const allChordsSharp = [keyOfCChords, keyOfCSChords, keyOfDChords, keyOfDSChords,
-							keyOfEChords, keyOfFChords, keyOfFSChords, keyOfGChords,
-							keyOfGSChords, keyOfAChords, keyOfASChords, keyOfBChords];
+	Cm: "C D# G".split(" "),
+	
+	Cs: "C# F G#".split(" "),
+	Db: "C# F G#".split(" "),
+	
+	Csm: "C# E G#".split(" "),
+	Dbm: "C# E G#".split(" "),
+	
+	D: "D F# A".split(" "),
+	
+	Dm: "D F A".split(" "),
+	
+	Ds: "D# G A#".split(" "),
+	Eb: "D# G A#".split(" "),
+	
+	Dsm: "D# F# A#".split(" "),
+	Ebm: "D# F# A#".split(" "),
+	
+	E: "E G# B".split(" "),
+	
+	Em: "E G B".split(" "),
+	
+	F: "F A C".split(" "),
+	
+	Fm: "F G# C".split(" "),
+	
+	Fs: "F# A# C#".split(" "),
+	Gb: "F# A# C#".split(" "),
+	
+	Fsm: "F# A C#".split(" "),
+	Gbm: "F# A C#".split(" "),
+	
+	G: "G B D".split(" "),
+	
+	Gm: "G A# D".split(" "),
+	
+	Gs: "G# C D#".split(" "),
+	Ab: "G# C D#".split(" "),
+	
+	Gsm: "G# B D#".split(" "),
+	Abm: "G# B D#".split(" "),
+	
+	A: "A C# E".split(" "),
+	
+	Am: "A C E".split(" "),
+	
+	As: "A# D F".split(" "),
+	Bb: "A# D F".split(" "),
+	
+	Asm: "A# C# F".split(" "),
+	Bbm: "A# C# F".split(" "),
+	
+	B: "B D# F#".split(" "),
+	
+	Bm: "B D F#".split(" "),
+	
+	};
+	
+	const keyOfAbChords = "Ab Bbm Cm Db Eb Fm Gdim".split(" ");
+	
+	const keyOfDbChords = "Db Ebm Fm Gb Ab Bbm Cdim".split(" ");
+	
+	const keyOfEbChords = "Eb Fm Gm Ab Bb Cm Ddim".split(" ");
+	
+	const keyOfBbChords = "Bb Cm Dm Eb F Gm Adim".split(" ");
+	
+	
+	const allChordsCircleOfFifths = [keyOfCChords, keyOfGChords, keyOfDChords, keyOfAChords, keyOfEChords, keyOfBChords, 
+							keyOfFSChords, 
+							keyOfDbChords, keyOfAbChords, keyOfEbChords, keyOfBbChords, keyOfFChords];
+			
+							
 	
 	
 	const CNotes = "C D E F G A B".split(" ");
@@ -112,12 +183,20 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	let randKey = randInt(0, 11);
 	let randChord = randInt(0, 5);
 	
-	let currentChord = allChordsSharp[randKey][randChord];
+	let currentChord = allChordsCircleOfFifths[randKey][randChord];
 	let currentChordNotes = [];
 	
 	let currentKeyNotes = ANotes;
 	let currentKeyAccidentals = ANotesAccidentals;
 	let currentKeyChords = keyOfAChords;
+	
+	function newChord()
+	{	  
+		let randKey = randInt(0, 11);
+		let randChord = randInt(0, 5);
+		
+		return allChordsCircleOfFifths[randKey][randChord];
+	}
 	
 	function midiToNoteName(midi) {
 	  if (isNaN(midi) || midi === -Infinity || midi === Infinity) return "";
@@ -128,7 +207,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  //  return pc;
 	  //}
 	  const o = Math.floor(midi / 12) - 1;
-	  return pc + "/" + o;
+	  return pc;// + "/" + o;
 	}
 	
 	function arraysEqual(a, b) {
@@ -174,11 +253,6 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		  bassVoice.draw(context, bassStave);
 	}
 	
-	
-	function newChord()
-	{
-	  return 
-	}
 	
 	function animate()
 	{
@@ -274,6 +348,26 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		    heldkeys.push(keyname);
 			
 		  console.log(heldkeys);
+		  
+		  //check if correct!
+		  let currentChordS = currentChord;
+		  
+		  //change # to s
+		  indexofsharp = currentChord.indexOf("#");
+		  if(indexofsharp != -1)
+			currentChordS = currentChord.substring(0, indexofsharp) + "s" + currentChord.substring(indexofsharp+1);
+		  
+		  let notes = chordNotes[currentChordS];
+		  console.log("current chord notes:", notes);
+		  
+		  if(arraysEqual(heldkeys, notes))
+		  {
+		    context.fillRect(0,22,20,20);
+			
+			currentChord = newChord();
+		  }
+		  
+		  
         };
 	});
 
