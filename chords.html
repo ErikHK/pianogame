@@ -67,7 +67,10 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	const TREBLEOCTAVERANGE = [parseInt(urlParams.get("trebleoctaverangefrom")), parseInt(urlParams.get("trebleoctaverangeto"))];
 	  
 	const BASSOCTAVERANGE = [parseInt(urlParams.get("bassoctaverangefrom")), parseInt(urlParams.get("bassoctaverangeto"))];
-	  
+	
+
+	const MAJORKEYS = urlParams.getAll("majorkey");
+	
     const { Renderer, Stave, StaveNote, Voice, Formatter} = Vex.Flow;
 	
 	const keyOfCChords = ["C", "Dm", "Em", "F", "G", "Am", "Bdim"];
@@ -179,24 +182,73 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
     const FLATS = "C Db D Eb E F Gb G Ab A Bb B".split(" ");
 
 	let heldkeys = [];
+	let heldkeycodes = [];
+	let heldkeysandkeycodes = [];
 	
-	let randKey = randInt(0, 11);
-	let randChord = randInt(0, 5);
-	
-	let currentChord = allChordsCircleOfFifths[randKey][randChord];
+	let currentChord = "";
 	let currentChordNotes = [];
+	let currentRootNote = "";
+	let currentChordName = "";
+	
+	function hashToS(str)
+	{
+	  indexofsharp = str.indexOf("#");
+		  if(indexofsharp != -1)
+			return str.substring(0, indexofsharp) + "s" + str.substring(indexofsharp+1);
+	  return str;
+	
+	}
+	
+	function shuffleArray(array) {
+		for (let i = array.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[array[i], array[j]] = [array[j], array[i]];
+		}
+	}
+	
+	function newChord()
+	{	  
+		
+		let keyKey = MAJORKEYS[Math.random() * MAJORKEYS.length | 0];
+		let keyChord = randInt(0, 5);
+		
+		let chord = allChordsCircleOfFifths[keyKey][keyChord];
+		
+		//make a copy!!!!
+		let chordNotes_ = chordNotes[hashToS(chord)].slice();
+		
+		let rootNote = chordNotes_[0];
+		
+		console.log("chord", chord, hashToS(chord), "noteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeesss", chordNotes_);
+		
+		let chordName = chord;
+		
+		
+		//first inversion
+		if(Math.random() > .5)
+		{
+		  console.log("WARNING SHUFFLING");
+		  let first = chordNotes_.shift();
+		  chordNotes_.push(first);
+		  
+		  chordName = chord + "/" + chordNotes_[0];
+		  console.log("new chord name: ", chordName);
+		}
+		
+		
+		return [chord, chordNotes_, rootNote, chordName];
+	}
+	
+	[currentChord, currentChordNotes, currentRootNote, currentChordName] = newChord();
+	
+	console.log(MAJORKEYS, currentChord, currentChordNotes);
+	
 	
 	let currentKeyNotes = ANotes;
 	let currentKeyAccidentals = ANotesAccidentals;
 	let currentKeyChords = keyOfAChords;
 	
-	function newChord()
-	{	  
-		let randKey = randInt(0, 11);
-		let randChord = randInt(0, 5);
-		
-		return allChordsCircleOfFifths[randKey][randChord];
-	}
+	
 	
 	function midiToNoteName(midi) {
 	  if (isNaN(midi) || midi === -Infinity || midi === Infinity) return "";
@@ -211,8 +263,8 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	}
 	
 	function arraysEqual(a, b) {
-	  a.sort();
-	  b.sort();
+	  //a.sort();
+	  //b.sort();
 	  if (a === b) return true;
 	  if (a == null || b == null) return false;
 	  if (a.length !== b.length) return false;
@@ -257,18 +309,20 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	function animate()
 	{
 	  ctx.clearRect(0,0,450, 100);
-	  ctx.fillStyle = "#ffdddddd";
-	  ctx.fillRect(0,0,450, 100);
-	  ctx.fillStyle = "#000";
+	  //ctx.fillStyle = "#ffdddddd";
+	  //ctx.fillRect(0,0,450, 100);
+	  //ctx.fillStyle = "#000";
 	  
 	  
-	  ctx.fillText(currentChord, 225, 50);
+	  //check if first note is same as chord!
+	  //first check if if has an m
 	  
+	  ctx.fillText(currentChordName, 225, 50);
 	  // clear canvas
 	  context.clearRect(0,0,450, 250);
-	  context.fillStyle = "#dedede";
-	  context.fillRect(0,0,450,250);
-	  context.fillStyle = "#000";
+	  //context.fillStyle = "#dedede";
+	  //context.fillRect(0,0,450,250);
+	  //context.fillStyle = "#000";
 	  
 	  drawNotes();  
 	  
@@ -332,39 +386,53 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		  
 		  let keyname = midiToNoteName(key);
 	  
-          console.log(keyname);
-		  console.log(command, key, velocity);
-		  console.log(heldkeys);
+          //console.log("keyname", keyname);
+		  console.log("command, key, vel: ", command, key, velocity);
+		  //console.log("held keys", heldkeys);
 		  
 		  //remove from heldkeys
 		  let keyind = heldkeys.indexOf(keyname);
-		  console.log(keyind);
+		  //console.log(keyind);
 		  if(keyind != -1)
+		  {
 		    heldkeys.splice(keyind, 1);
+			heldkeycodes.splice(keyind, 1);
+			heldkeysandkeycodes.splice(keyind, 1);
+		  }
 			
 		  
 		  //add to heldkeys
 		  if(velocity > 0 && command == 144)
+		  {
 		    heldkeys.push(keyname);
+			heldkeycodes.push(key);
+			heldkeysandkeycodes.push([keyname, key]);
+		  }
 			
-		  console.log(heldkeys);
+		  console.log("held keys:", heldkeys);
+		  console.log("held key codes:", heldkeycodes);
+		  
+		  console.log("held keys and codes:", heldkeysandkeycodes);
 		  
 		  //check if correct!
-		  let currentChordS = currentChord;
 		  
-		  //change # to s
-		  indexofsharp = currentChord.indexOf("#");
-		  if(indexofsharp != -1)
-			currentChordS = currentChord.substring(0, indexofsharp) + "s" + currentChord.substring(indexofsharp+1);
+		  console.log("current chord notes:", currentChordNotes);
+	
+
+		  //sort heldkeys in key code order!
+		  //first sort key codes in order:
+		  heldkeycodes.sort();
+		  console.log("held key codes sorted??????", heldkeycodes);
+		  heldkeysandkeycodes.sort((a, b) => heldkeycodes.indexOf(a[1]) - heldkeycodes.indexOf(b[1]));
 		  
-		  let notes = chordNotes[currentChordS];
-		  console.log("current chord notes:", notes);
 		  
-		  if(arraysEqual(heldkeys, notes))
+		  console.log("sorterad!!!!!!!!!!!!!!!!!!!!!!", heldkeysandkeycodes[0], heldkeysandkeycodes[1], heldkeysandkeycodes[2]);
+		  
+		  if(arraysEqual(heldkeys, currentChordNotes))
 		  {
 		    context.fillRect(0,22,20,20);
 			
-			currentChord = newChord();
+		    [currentChord, currentChordNotes, currentRootNote, currentChordName] = newChord();
 		  }
 		  
 		  
@@ -381,14 +449,9 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 			beat_value: 4,
 			});  
 
-
-	
-
 	//initialize shit!!
 	
-			
 	ctx.font = "bold 50px Verdana";
-	
 	
 	ctx.textAlign = "center";
 	ctx.textBaseline = "middle";
