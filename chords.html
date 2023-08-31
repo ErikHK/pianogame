@@ -427,6 +427,9 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		  
 		  
 		  console.log("sorterad!!!!!!!!!!!!!!!!!!!!!!", heldkeysandkeycodes[0], heldkeysandkeycodes[1], heldkeysandkeycodes[2]);
+		  heldkeys = heldkeysandkeycodes.flat().filter(function(_, i){ return i % 2 == 0 });
+		  
+		  console.log("sorterad igen???????????????", heldkeys);
 		  
 		  if(arraysEqual(heldkeys, currentChordNotes))
 		  {
