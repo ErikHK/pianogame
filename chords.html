@@ -68,6 +68,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  
 	const BASSOCTAVERANGE = [parseInt(urlParams.get("bassoctaverangefrom")), parseInt(urlParams.get("bassoctaverangeto"))];
 	
+	const STRICT = urlParams.has("strict");
 
 	const MAJORKEYS = urlParams.getAll("majorkey");
 	
@@ -280,8 +281,11 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	}
 	
 	function arraysEqual(a, b) {
-	  //a.sort();
-	  //b.sort();
+	  if(!STRICT)
+	  {
+	    a.sort();
+	    b.sort();
+	  }
 	  if (a === b) return true;
 	  if (a == null || b == null) return false;
 	  if (a.length !== b.length) return false;
@@ -440,15 +444,18 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 
 		  //sort heldkeys in key code order!
 		  //first sort key codes in order:
-		  heldkeycodes.sort();
-		  console.log("held key codes sorted??????", heldkeycodes);
-		  heldkeysandkeycodes.sort((a, b) => heldkeycodes.indexOf(a[1]) - heldkeycodes.indexOf(b[1]));
-		  
-		  
-		  console.log("sorterad!!!!!!!!!!!!!!!!!!!!!!", heldkeysandkeycodes[0], heldkeysandkeycodes[1], heldkeysandkeycodes[2]);
-		  heldkeys = heldkeysandkeycodes.flat().filter(function(_, i){ return i % 2 == 0 });
-		  
-		  console.log("sorterad igen???????????????", heldkeys);
+		  if(STRICT)
+		  {
+			  heldkeycodes.sort();
+			  console.log("held key codes sorted??????", heldkeycodes);
+			  heldkeysandkeycodes.sort((a, b) => heldkeycodes.indexOf(a[1]) - heldkeycodes.indexOf(b[1]));
+			  
+			  
+			  console.log("sorterad!!!!!!!!!!!!!!!!!!!!!!", heldkeysandkeycodes[0], heldkeysandkeycodes[1], heldkeysandkeycodes[2]);
+			  heldkeys = heldkeysandkeycodes.flat().filter(function(_, i){ return i % 2 == 0 });
+			  
+			  console.log("sorterad igen???????????????", heldkeys);
+		  }
 		  
 		  if(arraysEqual(heldkeys, currentChordNotes))
 		  {
