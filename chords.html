@@ -65,6 +65,12 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	const RANDOMIZETREBLECHORDINVERSIONS = urlParams.has("randomizetreblechordinv");
 	const RANDOMIZEBASSCHORDINVERSIONS = urlParams.has("randomizebasschordinv");
 	
+	const CHORDTYPES = urlParams.getAll("chords");
+	
+	const CHORDTYPE = CHORDTYPES[Math.floor(Math.random() * CHORDTYPES.length)];
+	
+	
+	
 	const TREBLEOCTAVERANGE = [parseInt(urlParams.get("trebleoctaverangefrom")), parseInt(urlParams.get("trebleoctaverangeto"))];
 	  
 	const BASSOCTAVERANGE = [parseInt(urlParams.get("bassoctaverangefrom")), parseInt(urlParams.get("bassoctaverangeto"))];
@@ -221,6 +227,22 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		}
 	}
 	
+	function sample(arr)
+	{
+	  
+		  return arr[Math.floor(Math.random() * arr.length) ];
+	}
+	
+	function Array3()
+	{
+	  extend(this, Array.prototype);
+	  extend(this, {
+	    Sample: function(){
+		  return this[Math.floor(Math.random() * this.length) | 0]
+		}
+	});
+	}
+	
 	function newChord()
 	{	  
 		
@@ -231,11 +253,55 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		
 		let keyChord = randInt(0, 5);
 		
-		let chord = allChordsCircleOfFifths[keyKey][keyChord];
+		console.log("chordtype: ", CHORDTYPE);
 		
-		//make a copy!!!!
-		let chordNotes_ = chordNotes[hashToS(chord)].slice();
+		if(CHORDTYPE == "dim" && Math.random() > .8)
+			//keyChord = randInt(0, 6);
+			keyChord = 6;
 		
+		//let chord = allChordsCircleOfFifths[keyKey][keyChord];
+		console.log("testa", keyKey, Tonal.Key.majorKey(currentKeySignature));
+		let chord = Tonal.Key.majorKey(currentKeySignature).triads[keyChord];
+		
+		console.log("hehehe chord types", CHORDTYPES);
+		
+		
+		let allChords = Tonal.Key.majorKey(currentKeySignature).chords;
+		
+		
+		
+		//check if maj7 chords etc
+		if(CHORDTYPE == "Maj7")
+			//if Maj7 then I IV or V is a Maj7 chord
+			chordindices = [0, 3];
+		else if(CHORDTYPE == "7")
+			chordindices = [4];
+		else if(CHORDTYPE == "m7")
+			chordindices = [1, 2, 5];
+		else if(CHORDTYPE == "major")
+		{
+			allChords = Tonal.Key.majorKey(currentKeySignature).triads;
+			chordindices = [0, 3, 4];
+		}
+		else if(CHORDTYPE == "minor")
+		{
+			allChords = Tonal.Key.majorKey(currentKeySignature).triads;
+			chordindices = [1, 2, 5];
+		}
+		else if(CHORDTYPE == "dim")
+		{
+			allChords = Tonal.Key.majorKey(currentKeySignature).triads;
+			chordindices = [6];
+		}
+		
+		
+		//set the chord by randomly picking one from the new list
+		chord = allChords[sample(chordindices)];
+		console.log("MAJ7!!!!!!", chord, chordindices, sample(chordindices), allChords);
+		
+		
+		let chordNotes_ = Tonal.Chord.get(chord).notes;
+		console.log("hehehehehehe", chordNotes_);
 		let rootNote = chordNotes_[0];
 		
 		console.log("chord", chord, hashToS(chord), "noteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeesss", chordNotes_);
@@ -270,6 +336,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 			  console.log("new chord name: ", chordName);
 			}
 		}
+		
 		
 		//trebleStave = new Stave(25, 20, 400);
 	    //bassStave = new Stave(25, 100, 400);
@@ -393,8 +460,13 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  //check if first note is same as chord!
 	  //first check if if has an m
 	  
+	  ctx.font = "bold 50px Verdana";
 	  ctx.fillText(currentChordName, 225, 50);
-	  // clear canvas
+	  
+	  ctx.font = "bold 20px Verdana";
+	  ctx.fillText("Key of " + currentKeySignature, 225, 85);
+	  
+	  // clear note canvas
 	  context.clearRect(0,0,450, 250);
 	  //context.fillStyle = "#dedede";
 	  //context.fillRect(0,0,450,250);
