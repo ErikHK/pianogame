@@ -44,6 +44,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	</div>
 	
 	<script src="vexflow.js"></script>
+	<script src="tonal.min.js"></script>
 	
     <script>
 	
@@ -74,6 +75,8 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
     const { Renderer, Stave, StaveNote, Voice, Formatter} = Vex.Flow;
 	
+	const { Interval, Note, Scale } = Tonal;
+	
 	const keyOfCChords = ["C", "Dm", "Em", "F", "G", "Am", "Bdim"];
 	const keyOfCSChords = "C# D#m Fm F# G# A#m Cdim".split(" ");
 	const keyOfDChords = "D Em F#m G A Bm C#dim".split(" ");
@@ -87,6 +90,9 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	const keyOfASChords = "A# Cm Dm D# F Gm Adim".split(" ");
 	const keyOfBChords = "B C#m D#m E F# G#m A#dim".split(" ");
 	
+	
+	console.log(Tonal.Key.majorKey("C"));
+	console.log(Tonal.Key.majorKey("C").triads);
 	
 	
 	const chordNotes = {
@@ -195,6 +201,10 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	let currentChordName = "";
 	let currentKeySignature = "C";
 	
+	
+    let trebleStave = new Stave(25, 20, 400);
+	let bassStave = new Stave(25, 100, 400);
+	  
 	function hashToS(str)
 	{
 	  indexofsharp = str.indexOf("#");
@@ -261,7 +271,13 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 			}
 		}
 		
-		
+		//trebleStave = new Stave(25, 20, 400);
+	    //bassStave = new Stave(25, 100, 400);
+	  
+		trebleStave.setKeySignature(currentKeySignature);
+	  
+	    bassStave.setKeySignature(currentKeySignature);
+
 		return [chord, chordNotes_, rootNote, chordName];
 	}
 	
@@ -404,8 +420,8 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  const ctx = canvas1.getContext('2d');
 	  
 	  
-      let trebleStave = new Stave(25, 20, 400);
-	  let bassStave = new Stave(25, 100, 400);
+      trebleStave = new Stave(25, 20, 400);
+	  bassStave = new Stave(25, 100, 400);
 	  
       trebleStave.addClef('treble');
 	  
