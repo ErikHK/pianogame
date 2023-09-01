@@ -87,6 +87,8 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	const keyOfASChords = "A# Cm Dm D# F Gm Adim".split(" ");
 	const keyOfBChords = "B C#m D#m E F# G#m A#dim".split(" ");
 	
+	
+	
 	const chordNotes = {
 	C: "C E G".split(" "),
 	
@@ -185,6 +187,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	let heldkeys = [];
 	let heldkeycodes = [];
 	let heldkeysandkeycodes = [];
+	let heldkeyswithoctave = [];
 	
 	let currentChord = "";
 	let currentChordNotes = [];
@@ -229,28 +232,33 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		
 		let chordName = chord;
 		
-		let randig = Math.random();
-		//first inversion
-		if(randig < .2)
+		
+		//invert chords, but only if strict is on
+		if(STRICT)
 		{
-		  console.log("WARNING SHUFFLING");
-		  let first = chordNotes_.shift();
-		  chordNotes_.push(first);
-		  
-		  chordName = chord + "/" + chordNotes_[0];
-		  console.log("new chord name: ", chordName);
-		}else if(randig < .4 && randig > .2)
-		{
-		  console.log("WARNING SHUFFLING");
-		  let first = chordNotes_.shift();
-		  chordNotes_.push(first);
-		  
-		  first = chordNotes_.shift();
-		  chordNotes_.push(first);
-		  
-		  
-		  chordName = chord + "/" + chordNotes_[0];
-		  console.log("new chord name: ", chordName);
+			let randig = Math.random();
+			//first inversion
+			if(randig < .2)
+			{
+			  console.log("WARNING SHUFFLING");
+			  let first = chordNotes_.shift();
+			  chordNotes_.push(first);
+			  
+			  chordName = chord + "/" + chordNotes_[0];
+			  console.log("new chord name: ", chordName);
+			}else if(randig < .4 && randig > .2)
+			{
+			  console.log("WARNING SHUFFLING");
+			  let first = chordNotes_.shift();
+			  chordNotes_.push(first);
+			  
+			  first = chordNotes_.shift();
+			  chordNotes_.push(first);
+			  
+			  
+			  chordName = chord + "/" + chordNotes_[0];
+			  console.log("new chord name: ", chordName);
+			}
 		}
 		
 		
@@ -268,7 +276,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	
 	
-	function midiToNoteName(midi) {
+	function midiToNoteName(midi, octave=false) {
 	  if (isNaN(midi) || midi === -Infinity || midi === Infinity) return "";
 	  midi = Math.round(midi);
 	  const pcs = SHARPS;
@@ -277,6 +285,9 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  //  return pc;
 	  //}
 	  const o = Math.floor(midi / 12) - 1;
+	  if(octave)
+	    return pc + "/" + o;  
+	  
 	  return pc;// + "/" + o;
 	}
 	
@@ -318,12 +329,40 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	//clear and redraw staves, voices etc
 	function drawNotes()
 	{
-		  trebleStave.draw();
-		  
-		  trebleVoice.draw(context, trebleStave);
 		
-		  bassStave.draw();
-		  bassVoice.draw(context, bassStave);
+		if(heldkeyswithoctave.length > 0)
+		{
+			let note = new StaveNote({
+				keys: heldkeyswithoctave,
+				duration: 'q',
+			});
+			let bassnote = new StaveNote({
+			    clef: "bass",
+				keys: heldkeyswithoctave,
+				duration: 'q',
+			});
+			
+			
+			
+			//console.log(heldkeyswithoctave);
+			
+			trebleVoice = new Voice({
+				num_beats: 4,
+				beat_value: 4,
+				});
+				
+			if (heldkeycodes[0] > 59)
+			  Formatter.FormatAndDraw(context, trebleStave, [note]);
+			else
+			  Formatter.FormatAndDraw(context, bassStave, [bassnote]);
+		}
+	
+		trebleStave.draw();
+		  
+		trebleVoice.draw(context, trebleStave);
+		
+		bassStave.draw();
+		bassVoice.draw(context, bassStave);
 	}
 	
 	
@@ -408,6 +447,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
           const [command, key, velocity] = m.data;
 		  
 		  let keyname = midiToNoteName(key);
+		  let keynamewithoctave = midiToNoteName(key, true);
 	  
           //console.log("keyname", keyname);
 		  console.log("command, key, vel: ", command, key, velocity);
@@ -419,6 +459,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		  if(keyind != -1)
 		  {
 		    heldkeys.splice(keyind, 1);
+			heldkeyswithoctave.splice(keyind, 1);
 			heldkeycodes.splice(keyind, 1);
 			heldkeysandkeycodes.splice(keyind, 1);
 		  }
@@ -430,12 +471,23 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		    heldkeys.push(keyname);
 			heldkeycodes.push(key);
 			heldkeysandkeycodes.push([keyname, key]);
+			heldkeyswithoctave.push(keynamewithoctave);
+		  }
+		  
+		  //if key is released
+		  if(command == 128)
+		  {
+		    trebleVoice = new Voice({
+			num_beats: 4,
+			beat_value: 4,
+			});
 		  }
 			
 		  console.log("held keys:", heldkeys);
 		  console.log("held key codes:", heldkeycodes);
 		  
 		  console.log("held keys and codes:", heldkeysandkeycodes);
+		  console.log("held keys w oct:", heldkeyswithoctave);
 		  
 		  //check if correct!
 		  
