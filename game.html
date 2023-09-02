@@ -76,6 +76,8 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	const RANDOMIZETREBLECHORDINVERSIONS = urlParams.has("randomizetreblechordinv");
 	const RANDOMIZEBASSCHORDINVERSIONS = urlParams.has("randomizebasschordinv");
 	
+	const MAJORKEYS = urlParams.getAll("majorkey");
+	
 	const TREBLERANGE = [parseInt(urlParams.get("treblerangefrom")), parseInt(urlParams.get("treblerangeto"))];
 	  
 	const BASSRANGE = [parseInt(urlParams.get("bassrangefrom")), parseInt(urlParams.get("bassrangeto"))];
@@ -122,7 +124,13 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	let currentIndex = 0;
 	
-	let currentKey = "C";
+	let allTonicsCircleOfFifths = "C G D A E B Gb Db Ab Eb Bb F".split(" ");
+	
+	let keyKey = MAJORKEYS[Math.random() * MAJORKEYS.length | 0];
+		
+	let currentKey = allTonicsCircleOfFifths[keyKey];
+	
+	
 	let currentKeyAccidentals = CNotesAccidentals;
 	let currentKeyChords = keyOfCChords;
 	
@@ -414,16 +422,46 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		  //let randomChord = Tonal.Chord.get(midiToNoteName(randomMidiKeyCode, false));
 		  let randomChord = Tonal.Chord.get(midiToNoteName(midiCode, false));
 		  
-		  console.log("midicode", midiCode);
+		  console.log("key", Tonal.Key.majorKey("C"));
 		  
-		  //generate major chord
+		  //for example = 1 if Dm in key of C
+		  let indexOfChord = Tonal.Key.majorKey(currentKey).scale.indexOf(successRootNote);
+		  let thisChord = Tonal.Key.majorKey(currentKey).triads[indexOfChord];
+		  
+		  //generate chord according to type
+		  let chordQuality = Tonal.Chord.get(thisChord).quality;
+		  
+		  let chordNotes = [midiToNoteName(successMidiCode, false),
+							midiToNoteName(successMidiCode+4, false),
+							midiToNoteName(successMidiCode+7, false)];
+		  if(chordQuality == "Major")
+		  {
+			  chordNotes = [midiToNoteName(successMidiCode, false),
+							midiToNoteName(successMidiCode+4, false),
+							midiToNoteName(successMidiCode+7, false)];
+		  }
+		  else if(chordQuality == "Minor")
+		  {
+			  chordNotes = [midiToNoteName(successMidiCode, false),
+							midiToNoteName(successMidiCode+3, false),
+							midiToNoteName(successMidiCode+7, false)];
+
+		  }
+		  
+		  
+		  //TODO: check if chord is in key!
+		  
 		  staveNoteChordNotes = [midiToNoteName(successMidiCode),
 						midiToNoteName(successMidiCode+4),
 						midiToNoteName(successMidiCode+7)];
 		  
 		  //randomChordNotes = ["F/4", "A/4", "C/5"];
-		  console.log("random chord notes: ", randomChord, randomChord.notes, staveNoteChordNotes);
+		  console.log("random chord notes: ", randomChord, randomChord.notes, staveNoteChordNotes, chordNotes);
 		  //treblenotes.push(randomChord);
+		  
+		  let chordName = Tonal.Chord.get(Tonal.Chord.detect(chordNotes)[0]);
+		  
+		  console.log("CHORD NAME", chordName);
 		  
 		  let note = new StaveNote({
 			  //keys: ["C/4"],
@@ -432,7 +470,12 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 			})
 		
 		  if (urlParams.has("showtreblechordnames") && USETREBLECHORDS)
-			note.addModifier( new Vex.Flow.ChordSymbol().addText(successRootNote));
+		  {
+		    if(chordName.symbol[chordName.symbol.length-1] == "M")
+				note.addModifier( new Vex.Flow.ChordSymbol().addText(chordName.symbol[0]));
+			else
+				note.addModifier( new Vex.Flow.ChordSymbol().addText(chordName.symbol));
+		  }
 
 		  //set success value to false
 		  note.success = false;
@@ -682,9 +725,9 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  
 	  bassStaves[0].addClef('bass').addTimeSignature('4/4');
 	  
-	  trebleStaves[0].addKeySignature('A');
+	  trebleStaves[0].addKeySignature(currentKey);
 
-	  bassStaves[0].addKeySignature('A');
+	  bassStaves[0].addKeySignature(currentKey);
       // Connect it to the rendering context and draw!
       trebleStaves[0].setContext(context).draw();
       trebleStaves[1].setContext(context).draw();
@@ -736,8 +779,6 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
         };
 
 	});
-
-	
 	
 	treblevoices = [];
 	bassvoices = [];
@@ -747,8 +788,8 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	console.log(treblenotes[0].keys);
 	
-	bassnotes = generateNewBassChords();
-	bassvoices = generateNewBassVoices();
+	//bassnotes = [];
+	//bassvoices = generateNewBassVoices();
 	
 	
 	//drawStaves();
