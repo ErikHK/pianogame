@@ -50,6 +50,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	</div>
 	
 	<script src="vexflow.js"></script>
+	<script src="tonal.min.js"></script>
 	
     <script>
 	
@@ -60,6 +61,11 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	const NUMBARS = 2;
 	const TREBLENOTEDURATION = urlParams.get("treblenoteduration");
 	const BASSNOTEDURATION = urlParams.get("bassnoteduration");
+	
+	const CHORDTYPES = urlParams.getAll("chords");
+	
+	const CHORDTYPE = CHORDTYPES[Math.floor(Math.random() * CHORDTYPES.length)];
+	
 	  
 	const USETREBLE = urlParams.has("treble");
 	const USEBASS = urlParams.has("bass");
@@ -70,9 +76,9 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	const RANDOMIZETREBLECHORDINVERSIONS = urlParams.has("randomizetreblechordinv");
 	const RANDOMIZEBASSCHORDINVERSIONS = urlParams.has("randomizebasschordinv");
 	
-	const TREBLEOCTAVERANGE = [parseInt(urlParams.get("trebleoctaverangefrom")), parseInt(urlParams.get("trebleoctaverangeto"))];
+	const TREBLERANGE = [parseInt(urlParams.get("treblerangefrom")), parseInt(urlParams.get("treblerangeto"))];
 	  
-	const BASSOCTAVERANGE = [parseInt(urlParams.get("bassoctaverangefrom")), parseInt(urlParams.get("bassoctaverangeto"))];
+	const BASSRANGE = [parseInt(urlParams.get("bassrangefrom")), parseInt(urlParams.get("bassrangeto"))];
 	  
     const { Renderer, Stave, StaveNote, Voice, Formatter} = Vex.Flow;
 	
@@ -116,20 +122,23 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	let currentIndex = 0;
 	
-	let currentKeyNotes = ANotes;
-	let currentKeyAccidentals = ANotesAccidentals;
-	let currentKeyChords = keyOfAChords;
+	let currentKey = "C";
+	let currentKeyAccidentals = CNotesAccidentals;
+	let currentKeyChords = keyOfCChords;
 	
-	function midiToNoteName(midi) {
+	function midiToNoteName(midi, octave=true) {
 	  if (isNaN(midi) || midi === -Infinity || midi === Infinity) return "";
 	  midi = Math.round(midi);
 	  const pcs = SHARPS;
 	  const pc = pcs[midi % 12];
 	  //if (options.pitchClass) {
 	  //  return pc;
-	  //}
+	  //})
 	  const o = Math.floor(midi / 12) - 1;
-	  return pc + "/" + o;
+	  
+	  if(octave)
+	    return pc + "/" + o;
+	  return pc;
 	}
 	
 	function arraysEqual(a, b) {
@@ -155,6 +164,25 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		context.fillStyle="green";
 		
 	  }
+	  
+	  
+	  function shuffle(array) {
+	  let currentIndex = array.length,  randomIndex;
+
+	  // While there remain elements to shuffle.
+	  while (currentIndex > 0) {
+
+		// Pick a remaining element.
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex--;
+
+		// And swap it with the current element.
+		[array[currentIndex], array[randomIndex]] = [
+		  array[randomIndex], array[currentIndex]];
+	  }
+
+	  return array;
+}
 	  
 	  
 	  function nextLetter(l, i)
@@ -201,8 +229,16 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  }
 	  
 	  
-	  function randomizeChordFromRootNote(rootNote, octave)
+	  function randomizeChordFromRootNote()
 	  {
+	    
+	    
+	  }
+	  
+	  
+	  function randomizeChordFromRootNote(rootNote)
+	  {
+	    let octave = 4;
 		let thirdNote_ = nextLetter(rootNote,2);
 		let fifthNote_ = nextLetter(rootNote,4);
 		let eigthNote_ = nextLetter(rootNote,7);
@@ -270,9 +306,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		{
 		  let randname = currentKeyChords[randInt(0,5)];
 		  
-		  let notename = randomizeChordFromRootNote(randname[0], randInt(BASSOCTAVERANGE[0], BASSOCTAVERANGE[1]));
-		  
-		  console.log(notename);
+		  let notename = randomizeChordFromRootNote(randname[0], randInt(BASSRANGE[0], BASSRANGE[1]));
 		  
 		  //if playing only single notes then splice
 		  if(!USEBASSCHORDS)
@@ -295,7 +329,123 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		return bassnotes;
 		
 	}
+	
+	
+	function sample(arr)
+	{
 	  
+		  return arr[Math.floor(Math.random() * arr.length) ];
+	}
+	
+	function generateNewTrebleChords()
+	{
+	  let numnotes = 4;
+		if(TREBLENOTEDURATION == 'w')
+		  numnotes = 1;
+		else if(TREBLENOTEDURATION == 'h')
+		  numnotes = 2;
+		else if(TREBLENOTEDURATION == 'q')
+		  numnotes = 4;
+		else if(TREBLENOTEDURATION == '8')
+		  numnotes = 8;
+		
+		let treblenotes = [];
+		
+		for(let i = 0; i < numnotes*NUMBARS; i++)
+		{
+		  //generate random chord root note in current key signature
+		  //build chord from random octave 0 to 8, while not in range
+		  
+		  let rootNote = sample(Tonal.Key.majorKey(currentKey).scale);
+		  console.log("root note is:", rootNote);
+		  
+		  let octaveNum = randInt(0,8);
+		  let midiCode = Tonal.Note.midi(rootNote + octaveNum);
+		  
+		  //do possible inversions here!
+		  
+		  
+		  let octaves = [0,1,2,3,4,5,6,7];
+		  shuffle(octaves);
+		  let successOctave = -1;
+		  let successRootNote = "";
+		  let successMidiCode = 0;
+		  let chordTonics = Tonal.Key.majorKey(currentKey).scale.slice();
+		  
+		  shuffle(chordTonics);
+		  
+		  
+		  
+		  
+		  for(let j = 0; j < chordTonics.length; j+=1)
+		  {
+			rootNote = chordTonics[j];
+			  for(let i = 0; i < 8; i+=1)
+			  {
+			  
+				//rootNote = sample(Tonal.Key.majorKey(currentKey).scale);
+				octaveNum = octaves[i];
+				midiCode = Tonal.Note.midi(rootNote + octaveNum);
+				
+				
+				 if(midiCode > TREBLERANGE[0] && midiCode + 7 < TREBLERANGE[1])
+				 {
+				   successOctave = octaveNum;
+				   successRootNote = rootNote;
+				   successMidiCode = midiCode;
+				   break;
+				 }
+				   
+			  }
+			  
+		  }
+		  
+		  let rootNoteVex = rootNote + "/" + octaveNum;
+		  
+		  console.log("octave num", octaveNum, Tonal.Note.midi(rootNote + octaveNum), chordTonics);
+		  
+		  console.log("success octave num", successOctave, successRootNote, successMidiCode);
+		  
+		
+		
+		  //let randomMidiKeyCode = randInt(TREBLERANGE[0], TREBLERANGE[1]);
+		  //console.log("random midi code:", randomMidiKeyCode, midiToNoteName(randomMidiKeyCode));
+		
+		  //let randomChord = Tonal.Chord.get(midiToNoteName(randomMidiKeyCode, false));
+		  let randomChord = Tonal.Chord.get(midiToNoteName(midiCode, false));
+		  
+		  console.log("midicode", midiCode);
+		  
+		  //generate major chord
+		  staveNoteChordNotes = [midiToNoteName(successMidiCode),
+						midiToNoteName(successMidiCode+4),
+						midiToNoteName(successMidiCode+7)];
+		  
+		  //randomChordNotes = ["F/4", "A/4", "C/5"];
+		  console.log("random chord notes: ", randomChord, randomChord.notes, staveNoteChordNotes);
+		  //treblenotes.push(randomChord);
+		  
+		  let note = new StaveNote({
+			  //keys: ["C/4"],
+			  keys: staveNoteChordNotes,
+			  duration: TREBLENOTEDURATION,
+			})
+		
+		  if (urlParams.has("showtreblechordnames") && USETREBLECHORDS)
+			note.addModifier( new Vex.Flow.ChordSymbol().addText(successRootNote));
+
+		  //set success value to false
+		  note.success = false;
+		  treblenotes.push(note);
+		  
+		  console.log("random chord: ", randomChord);
+		  //treblenotes.push(randomChord);
+		}
+		
+		return treblenotes;
+	}
+	
+/*
 	function generateNewTrebleChords()
 	{
 		let numnotes = 4;
@@ -313,11 +463,12 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		for(let i = 0; i < numnotes*NUMBARS; i++)
 		{
 		  let randname = currentKeyChords[randInt(0,5)];
-		  console.log("hehe range", TREBLEOCTAVERANGE, randInt(3,4));
+		  console.log("hehe range", randname, TREBLERANGE, randInt(3,4));
 		  
-		  let notename = randomizeChordFromRootNote(randname[0], randInt(TREBLEOCTAVERANGE[0], TREBLEOCTAVERANGE[1]));
+		  let notename = randomizeChordFromRootNote(randname[0], randInt(TREBLERANGE[0], TREBLERANGE[1]));
 		  
-		  console.log(notename);
+		  
+		  console.log("notename för fan: ", notename);
 		  
 		  //if playing only single notes then splice
 		  if(!USETREBLECHORDS)
@@ -338,7 +489,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		
 		return treblenotes;
 	}
-	
+	*/
 	
 	function generateNewTrebleVoices()
 	{
