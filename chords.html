@@ -65,9 +65,13 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	const RANDOMIZETREBLECHORDINVERSIONS = urlParams.has("randomizetreblechordinv");
 	const RANDOMIZEBASSCHORDINVERSIONS = urlParams.has("randomizebasschordinv");
 	
+	
+	const ROOTINVERSIONS = urlParams.getAll("inversions").includes("0");
 	const FIRSTINVERSIONS = urlParams.getAll("inversions").includes("1");
 	const SECONDINVERSIONS = urlParams.getAll("inversions").includes("2");
 	const THIRDINVERSIONS = urlParams.getAll("inversions").includes("3");
+	
+	const INVERSIONS = urlParams.getAll("inversions");
 	
 	const CHORDTYPES = urlParams.getAll("chords");
 	
@@ -247,6 +251,23 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	});
 	}
 	
+	function invertChord(chordNotes_, times)
+	{
+	
+	  for(let i=0; i < times; i++)
+	  {
+	    let first = chordNotes_.shift();
+	    chordNotes_.push(first);
+      }	  
+	  
+	  return chordNotes_;
+	}
+	
+	function updateChordName(chordNotes_, chord)
+	{
+	  return chord + "/" + chordNotes_[0];
+	}
+	
 	function newChord()
 	{	  
 		
@@ -313,6 +334,16 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		let chordName = chord;
 		
 		//invert chords
+		//pick random index from INVERSIONS
+		
+		let invind = sample(INVERSIONS); //invind = 0, 1, 2 or 3
+		console.log("invind:", invind);
+		
+		chordNotes_ = invertChord(chordNotes_, invind);
+		if(invind != 0)
+		  chordName = updateChordName(chordNotes_, chord);
+		
+		/*
 		if(FIRSTINVERSIONS)
 		{
 			let randig = Math.random();
@@ -339,7 +370,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 			  console.log("new chord name: ", chordName);
 			}
 		}
-		
+		*/
 		
 		//trebleStave = new Stave(25, 20, 400);
 	    //bassStave = new Stave(25, 100, 400);
