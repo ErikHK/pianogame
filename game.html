@@ -124,11 +124,12 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	let currentIndex = 0;
 	
-	let allTonicsCircleOfFifths = "C G D A E B Gb Db Ab Eb Bb F".split(" ");
+	//let allTonicsCircleOfFifths = "C G D A E B Gb Db Ab Eb Bb F".split(" ");
+	let allTonics = "C C# D D# E F F# G G# A A# B Db Eb Gb Ab Bb".split(" ");
 	
 	let keyKey = MAJORKEYS[Math.random() * MAJORKEYS.length | 0];
 		
-	let currentKey = allTonicsCircleOfFifths[keyKey];
+	let currentKey = allTonics[keyKey];
 	
 	
 	let currentKeyAccidentals = CNotesAccidentals;
@@ -296,6 +297,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  
 	}
 	
+	
 	function generateNewBassChords()
 	{
 		let numnotes = 4;
@@ -345,9 +347,22 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		  return arr[Math.floor(Math.random() * arr.length) ];
 	}
 	
-	function findRootNoteInRange(chordWidth)
+	function findRootNoteInRange(chordWidth, treble)
 	{
+	  let clef = "treble";
+	  if(!treble)
+	    clef = "bass";
 	
+	  let noteRange = TREBLERANGE;
+	  let noteDuration = TREBLENOTEDURATION;
+	  
+	  if(!treble)
+	  {
+	    noteRange = BASSRANGE;
+		noteDuration = BASSNOTEDURATION;
+	  }
+	    
+	  
 	  let octaves = [0,1,2,3,4,5,6,7];
 	  shuffle(octaves);
 	  let successOctaveNum = -1;
@@ -371,7 +386,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 			midiCode = Tonal.Note.midi(rootNote + octaveNum);
 					
 					
-			 if(midiCode >= TREBLERANGE[0] && midiCode + chordWidth-1 <= TREBLERANGE[1])
+			 if(midiCode >= noteRange[0] && midiCode + chordWidth-1 <= noteRange[1])
 			 {
 			   successOctaveNum = octaveNum;
 			   successRootNote = rootNote;
@@ -384,11 +399,13 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  }
 			  
 	  let rootNoteVex = successRootNote + "/" + successOctaveNum;
+	  console.log("heheheheheheheheeheeeeeeeeeee", rootNoteVex);
 		  
 	  let staveNote = new StaveNote({
 			  //keys: ["C/4"],
+			  clef: clef,
 			  keys: [rootNoteVex],
-			  duration: TREBLENOTEDURATION,
+			  duration: noteDuration,
 			});
 				
 	  staveNote.success = false;
@@ -396,6 +413,49 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  return staveNote;
 	}
 	
+	function generateNewNote(treble)
+	{
+	  let numnotes = 4;
+	  
+	  if(treble)
+	  {
+		if(TREBLENOTEDURATION == 'w')
+		  numnotes = 1;
+		else if(TREBLENOTEDURATION == 'h')
+		  numnotes = 2;
+		else if(TREBLENOTEDURATION == 'q')
+		  numnotes = 4;
+		else if(TREBLENOTEDURATION == '8')
+		  numnotes = 8;
+		  
+	  } else {
+	  
+		if(BASSNOTEDURATION == 'w')
+		  numnotes = 1;
+		else if(BASSNOTEDURATION == 'h')
+		  numnotes = 2;
+		else if(BASSNOTEDURATION == 'q')
+		  numnotes = 4;
+		else if(BASSNOTEDURATION == '8')
+		  numnotes = 8;
+	  
+	  }
+		
+		let notes = [];
+		
+		
+		for(let i = 0; i < numnotes*NUMBARS; i++)
+		{
+		  
+		  let staveNote = findRootNoteInRange(1, treble);
+		
+		  staveNote.success = false;
+		  notes.push(staveNote);
+	  }
+	  
+	  return notes;
+	  
+	}
 	
 	function generateNewTrebleNote()
 	{
@@ -416,12 +476,11 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		for(let i = 0; i < numnotes*NUMBARS; i++)
 		{
 		  
-		  let staveNote = findRootNoteInRange(1);
+		  let staveNote = findRootNoteInRange(1, true);
 		
 		  staveNote.success = false;
 		  treblenotes.push(staveNote);
 	  }
-	  
 	  
 	  return treblenotes;
 	  
@@ -567,52 +626,6 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		
 		return treblenotes;
 	}
-	
-/*
-	function generateNewTrebleChords()
-	{
-		let numnotes = 4;
-		if(TREBLENOTEDURATION == 'w')
-		  numnotes = 1;
-		else if(TREBLENOTEDURATION == 'h')
-		  numnotes = 2;
-		else if(TREBLENOTEDURATION == 'q')
-		  numnotes = 4;
-		else if(TREBLENOTEDURATION == '8')
-		  numnotes = 8;
-		
-		treblenotes = [];
-		
-		for(let i = 0; i < numnotes*NUMBARS; i++)
-		{
-		  let randname = currentKeyChords[randInt(0,5)];
-		  console.log("hehe range", randname, TREBLERANGE, randInt(3,4));
-		  
-		  let notename = randomizeChordFromRootNote(randname[0], randInt(TREBLERANGE[0], TREBLERANGE[1]));
-		  
-		  
-		  console.log("notename för fan: ", notename);
-		  
-		  //if playing only single notes then splice
-		  if(!USETREBLECHORDS)
-		    notename = [notename[0]];
-			
-		  let note = new StaveNote({
-			  keys: notename,
-			  duration: TREBLENOTEDURATION,
-			})
-		
-		  if (urlParams.has("showtreblechordnames") && USETREBLECHORDS)
-			note.addModifier( new Vex.Flow.ChordSymbol().addText(randname));
-
-		  //set success value to false
-		  note.success = false;
-		  treblenotes.push(note);
-		}
-		
-		return treblenotes;
-	}
-	*/
 	
 	function generateNewTrebleVoices()
 	{
@@ -820,9 +833,14 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  trebleStaves[0].addKeySignature(currentKey);
 
 	  bassStaves[0].addKeySignature(currentKey);
+	  
+	  
       // Connect it to the rendering context and draw!
+	  if(USETREBLE)
+	  {
       trebleStaves[0].setContext(context).draw();
       trebleStaves[1].setContext(context).draw();
+	  }
 	  
       bassStaves[0].setContext(context).draw();
       bassStaves[1].setContext(context).draw();
@@ -875,19 +893,27 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	treblevoices = [];
 	bassvoices = [];
 	
+	if(USETREBLE)
+	{
+	  if(USETREBLECHORDS)
+	    treblenotes = generateNewTrebleChords();
+	  else
+	    treblenotes = generateNewTrebleNote();
+		
+	  
+	  treblevoices = generateNewTrebleVoices();
+	  
+	  console.log(treblenotes[0].keys);
+	}
 	
-	if(USETREBLECHORDS)
-	  treblenotes = generateNewTrebleChords();
-	else
-	  treblenotes = generateNewTrebleNote();
 	
 	
-	treblevoices = generateNewTrebleVoices();
-	
-	console.log(treblenotes[0].keys);
-	
-	bassnotes = [];
-	//bassvoices = generateNewBassVoices();
+	//bassnotes = [];
+	if(USEBASS)
+	{
+	  bassnotes = generateNewNote(false);
+	  bassvoices = generateNewBassVoices();
+	}
 	
 	
 	//drawStaves();
@@ -908,14 +934,12 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  bassStaves[0].draw();
 	  bassStaves[1].draw();
 	  
-	  
 	  bassvoices[0].draw(context, bassStaves[0]);
       bassvoices[1].draw(context, bassStaves[1]);
 	}
 	
 
 	animate();
-
     </script>
   </body>
 </html>

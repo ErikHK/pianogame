@@ -276,7 +276,7 @@
 			  </select></td>
 			  
 		  
-		  <td><span>Octave range</span>
+		  <td><span>Note range</span>
 		    <select name="treblerangefrom">
 		      <option value="49">C3</option>
 			  <option value="51" selected>D3</option>
@@ -317,18 +317,36 @@
 			  <option value="8">Eighth notes</option>
 			  </select></td>
 			  
-		  <td><span>Octave range</span>
-		    <select name="bassoctaverangefrom">
-		      <option value="1">1</option>
-			  <option value="2" selected>2</option>
-			  <option value="3">3</option>
-			  <option value="4">4</option>
+		  <td><span>Note range</span>
+		    <select name="bassrangefrom">
+		      <option value="31">G1</option>
+		      <option value="33">A1</option>
+		      <option value="35">B1</option>
+		      <option value="36">C2</option>
+		      <option value="38">D2</option>
+			  <option value="40" selected>E2</option>
+			  <option value="41">F2</option>
+			  <option value="43">G2</option>
+			  <option value="45">A2</option>
+			  <option value="47">B2</option>
+			  <option value="48">C3</option>
+			  <option value="50">D3</option>
 			  </select>
-		    <select name="bassoctaverangeto">
-		      <option value="1">1</option>
-			  <option value="2">2</option>
-			  <option value="3">3</option>
-			  <option value="4" selected>4</option>
+		    <select name="bassrangeto">
+			
+		      <option value="52">E3</option>
+		      <option value="53">F3</option>
+		      <option value="55">G3</option>
+		      <option value="57">A3</option>
+		      <option value="59">B3</option>
+		      <option value="60">C4</option>
+			  <option value="62" selected>D4</option>
+			  <option value="64">E4</option>
+			  <option value="65">F4</option>
+			  <option value="67">G4</option>
+			  <option value="69">A4</option>
+			  <option value="71">B4</option>
+			  <option value="72">C5</option>
 			  </select></td>
 			  
 		  
@@ -348,31 +366,31 @@
 		  
 		  <td><input type="checkbox" name="majorkey" value="0" checked /><span>C</span></td>
 		  <td><input type="checkbox" name="majorkey" value="1" /><span>C#</span></td>
-		  <td><input type="checkbox" name="majorkey" value="3" /><span>D</span></td>
-		  <td><input type="checkbox" name="majorkey" value="4" /><span>D#</span></td>
-		  <td><input type="checkbox" name="majorkey" value="6" /><span>E</span></td>
-		  <td><input type="checkbox" name="majorkey" value="7" /><span>F</span></td>
-		  <td><input type="checkbox" name="majorkey" value="8" /><span>F#</span></td>
-		  <td><input type="checkbox" name="majorkey" value="10" /><span>G</span></td>
-		  <td><input type="checkbox" name="majorkey" value="11" /><span>G#</span></td>
-		  <td><input type="checkbox" name="majorkey" value="13" /><span>A</span></td>
-		  <td><input type="checkbox" name="majorkey" value="14" /><span>A#</span></td>
-		  <td><input type="checkbox" name="majorkey" value="16" /><span>B</span></td>
+		  <td><input type="checkbox" name="majorkey" value="2" /><span>D</span></td>
+		  <td><input type="checkbox" name="majorkey" value="3" /><span>D#</span></td>
+		  <td><input type="checkbox" name="majorkey" value="4" /><span>E</span></td>
+		  <td><input type="checkbox" name="majorkey" value="5" /><span>F</span></td>
+		  <td><input type="checkbox" name="majorkey" value="6" /><span>F#</span></td>
+		  <td><input type="checkbox" name="majorkey" value="7" /><span>G</span></td>
+		  <td><input type="checkbox" name="majorkey" value="8" /><span>G#</span></td>
+		  <td><input type="checkbox" name="majorkey" value="9" /><span>A</span></td>
+		  <td><input type="checkbox" name="majorkey" value="10" /><span>A#</span></td>
+		  <td><input type="checkbox" name="majorkey" value="11" /><span>B</span></td>
 		  </tr>
 		  
 		  <tr>
 		  
 		  <td></td>
-		  <td><input type="checkbox" name="majorkey" value="1" /><span>Db</span></td>
+		  <td><input type="checkbox" name="majorkey" value="12" /><span>Db</span></td>
 		  <td></td>
-		  <td><input type="checkbox" name="majorkey" value="3" /><span>Eb</span></td>
+		  <td><input type="checkbox" name="majorkey" value="13" /><span>Eb</span></td>
 		  <td></td>
 		  <td></td>
-		  <td><input type="checkbox" name="majorkey" value="6" /><span>Gb</span></td>
+		  <td><input type="checkbox" name="majorkey" value="14" /><span>Gb</span></td>
 		  <td></td>
-		  <td><input type="checkbox" name="majorkey" value="8" /><span>Ab</span></td>
+		  <td><input type="checkbox" name="majorkey" value="15" /><span>Ab</span></td>
 		  <td></td>
-		  <td><input type="checkbox" name="majorkey" value="10" /><span>Bb</span></td>
+		  <td><input type="checkbox" name="majorkey" value="16" /><span>Bb</span></td>
 		  <td></td>
 		  </tr>
 		  
@@ -387,30 +405,30 @@
 		  
 		  <td><input type="checkbox" name="minorkey" value="0" checked /><span>Cm</span></td>
 		  <td><input type="checkbox" name="minorkey" value="1" /><span>C#m</span></td>
-		  <td><input type="checkbox" name="minorkey" value="3" /><span>Dm</span></td>
-		  <td><input type="checkbox" name="minorkey" value="4" /><span>D#m</span></td>
-		  <td><input type="checkbox" name="minorkey" value="6" /><span>Em</span></td>
-		  <td><input type="checkbox" name="minorkey" value="7" /><span>Fm</span></td>
-		  <td><input type="checkbox" name="minorkey" value="8" /><span>F#m</span></td>
-		  <td><input type="checkbox" name="minorkey" value="10" /><span>Gm</span></td>
-		  <td><input type="checkbox" name="minorkey" value="11" /><span>G#m</span></td>
-		  <td><input type="checkbox" name="minorkey" value="13" /><span>Am</span></td>
-		  <td><input type="checkbox" name="minorkey" value="14" /><span>A#m</span></td>
-		  <td><input type="checkbox" name="minorkey" value="16" /><span>Bm</span></td>
+		  <td><input type="checkbox" name="minorkey" value="2" /><span>Dm</span></td>
+		  <td><input type="checkbox" name="minorkey" value="3" /><span>D#m</span></td>
+		  <td><input type="checkbox" name="minorkey" value="4" /><span>Em</span></td>
+		  <td><input type="checkbox" name="minorkey" value="5" /><span>Fm</span></td>
+		  <td><input type="checkbox" name="minorkey" value="6" /><span>F#m</span></td>
+		  <td><input type="checkbox" name="minorkey" value="7" /><span>Gm</span></td>
+		  <td><input type="checkbox" name="minorkey" value="8" /><span>G#m</span></td>
+		  <td><input type="checkbox" name="minorkey" value="9" /><span>Am</span></td>
+		  <td><input type="checkbox" name="minorkey" value="10" /><span>A#m</span></td>
+		  <td><input type="checkbox" name="minorkey" value="11" /><span>Bm</span></td>
 		  </tr>
 		  
 		  <tr>
 		  <td></td>
-		  <td><input type="checkbox" name="minorkey" value="1" /><span>Dbm</span></td>
+		  <td><input type="checkbox" name="minorkey" value="12" /><span>Dbm</span></td>
 		  <td></td>
-		  <td><input type="checkbox" name="minorkey" value="3" /><span>Ebm</span></td>
+		  <td><input type="checkbox" name="minorkey" value="13" /><span>Ebm</span></td>
 		  <td></td>
 		  <td></td>
-		  <td><input type="checkbox" name="minorkey" value="6" /><span>Gbm</span></td>
+		  <td><input type="checkbox" name="minorkey" value="14" /><span>Gbm</span></td>
 		  <td></td>
-		  <td><input type="checkbox" name="minorkey" value="8" /><span>Abm</span></td>
+		  <td><input type="checkbox" name="minorkey" value="15" /><span>Abm</span></td>
 		  <td></td>
-		  <td><input type="checkbox" name="minorkey" value="10" /><span>Bbm</span></td>
+		  <td><input type="checkbox" name="minorkey" value="16" /><span>Bbm</span></td>
 		  <td></td>
 		  </tr>
 		  
