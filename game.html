@@ -345,9 +345,92 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		  return arr[Math.floor(Math.random() * arr.length) ];
 	}
 	
+	function findRootNoteInRange(chordWidth)
+	{
+	
+	  let octaves = [0,1,2,3,4,5,6,7];
+	  shuffle(octaves);
+	  let successOctaveNum = -1;
+	  let successRootNote = "";
+	  let successMidiCode = 0;
+	  
+	  
+	  //root notes in scale, C D E F G A B in C for example
+	  let chordTonics = Tonal.Key.majorKey(currentKey).scale.slice();
+	  
+	  shuffle(chordTonics);
+			  
+	  for(let j = 0; j < chordTonics.length; j+=1)
+	  {
+		rootNote = chordTonics[j];
+		  for(let i = 0; i < 8; i+=1)
+		  {
+				
+			//rootNote = sample(Tonal.Key.majorKey(currentKey).scale);
+			octaveNum = octaves[i];
+			midiCode = Tonal.Note.midi(rootNote + octaveNum);
+					
+					
+			 if(midiCode >= TREBLERANGE[0] && midiCode + chordWidth-1 <= TREBLERANGE[1])
+			 {
+			   successOctaveNum = octaveNum;
+			   successRootNote = rootNote;
+			   successMidiCode = midiCode;
+			   break;
+			 }
+					   
+		  }
+				  
+	  }
+			  
+	  let rootNoteVex = successRootNote + "/" + successOctaveNum;
+		  
+	  let staveNote = new StaveNote({
+			  //keys: ["C/4"],
+			  keys: [rootNoteVex],
+			  duration: TREBLENOTEDURATION,
+			});
+				
+	  staveNote.success = false;
+		    
+	  return staveNote;
+	}
+	
+	
+	function generateNewTrebleNote()
+	{
+	  let numnotes = 4;
+	  
+		if(TREBLENOTEDURATION == 'w')
+		  numnotes = 1;
+		else if(TREBLENOTEDURATION == 'h')
+		  numnotes = 2;
+		else if(TREBLENOTEDURATION == 'q')
+		  numnotes = 4;
+		else if(TREBLENOTEDURATION == '8')
+		  numnotes = 8;
+		
+		let treblenotes = [];
+		
+		
+		for(let i = 0; i < numnotes*NUMBARS; i++)
+		{
+		  
+		  let staveNote = findRootNoteInRange(1);
+		
+		  staveNote.success = false;
+		  treblenotes.push(staveNote);
+	  }
+	  
+	  
+	  return treblenotes;
+	  
+	}
+	
 	function generateNewTrebleChords()
 	{
 	  let numnotes = 4;
+	  
 		if(TREBLENOTEDURATION == 'w')
 		  numnotes = 1;
 		else if(TREBLENOTEDURATION == 'h')
@@ -375,15 +458,12 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		  
 		  let octaves = [0,1,2,3,4,5,6,7];
 		  shuffle(octaves);
-		  let successOctave = -1;
+		  let successOctaveNum = -1;
 		  let successRootNote = "";
 		  let successMidiCode = 0;
 		  let chordTonics = Tonal.Key.majorKey(currentKey).scale.slice();
 		  
 		  shuffle(chordTonics);
-		  
-		  
-		  
 		  
 		  for(let j = 0; j < chordTonics.length; j+=1)
 		  {
@@ -396,9 +476,9 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 				midiCode = Tonal.Note.midi(rootNote + octaveNum);
 				
 				
-				 if(midiCode > TREBLERANGE[0] && midiCode + 7 < TREBLERANGE[1])
+				 if(midiCode >= TREBLERANGE[0] && midiCode + 7 <= TREBLERANGE[1])
 				 {
-				   successOctave = octaveNum;
+				   successOctaveNum = octaveNum;
 				   successRootNote = rootNote;
 				   successMidiCode = midiCode;
 				   break;
@@ -408,11 +488,11 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 			  
 		  }
 		  
-		  let rootNoteVex = rootNote + "/" + octaveNum;
+		  let rootNoteVex = rootNote + "/" + successOctaveNum;
 		  
-		  console.log("octave num", octaveNum, Tonal.Note.midi(rootNote + octaveNum), chordTonics);
+		  console.log("octave num", octaveNum, Tonal.Note.midi(rootNote + successOctaveNum), chordTonics);
 		  
-		  console.log("success octave num", successOctave, successRootNote, successMidiCode);
+		  console.log("success octave num", successOctaveNum, successRootNote, successMidiCode);
 		  
 		
 		
@@ -548,11 +628,14 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 			beat_value: 4,
 			}));
 		
+
 		treblevoices[0].addTickables(treblenotes.slice(0, treblenotes.length/2));
 		treblevoices[1].addTickables(treblenotes.slice(treblenotes.length/2));
 		
 		Formatter.FormatAndDraw(context, trebleStaves[0], treblenotes.slice(0, treblenotes.length/2));
 		Formatter.FormatAndDraw(context, trebleStaves[1], treblenotes.slice(treblenotes.length/2));
+
+		
 		
 		return treblevoices;
 	}
@@ -783,7 +866,13 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	treblevoices = [];
 	bassvoices = [];
 	
-	treblenotes = generateNewTrebleChords();
+	
+	if(USETREBLECHORDS)
+	  treblenotes = generateNewTrebleChords();
+	else
+	  treblenotes = generateNewTrebleNote();
+	
+	
 	treblevoices = generateNewTrebleVoices();
 	
 	console.log(treblenotes[0].keys);
