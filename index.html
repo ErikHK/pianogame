@@ -116,6 +116,33 @@
 	}
 	
   </style>
+  
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script>
+  
+  function showHideBass()
+  {
+    if($('.bass').is(":checked"))   
+      $(".bassStuff").show();
+	else
+	  $(".bassStuff").hide();
+	  
+	console.log($('.bass').is(":checked"));
+  }
+  
+  function showHideTreble()
+  {
+   if($('.treble').is(":checked"))   
+      $(".trebleStuff").show();
+	else
+	  $(".trebleStuff").hide();
+	 
+    
+	console.log($('.treble').is(":checked"));
+  }
+  
+  </script>
+  
   <title>Piano Game</title>
   <body id="bod">
     <div id="container">
@@ -130,8 +157,8 @@
 		<table>
 		  <tr>
 		  
-		  <td><span>Treble</span><input type="checkbox" name="treble" value="" checked /></td>
-		  <td><span>Bass</span><input type="checkbox" name="bass" value="" /></td>
+		  <td><span>Treble</span><input type="checkbox" name="treble" class="treble" value="" onchange="showHideTreble()" /></td>
+		  <td><span>Bass</span><input type="checkbox" name="bass" class="bass" value="" onchange="showHideBass()" /></td>
 		  </tr>
 		</table>
 		</fieldset>
@@ -139,7 +166,7 @@
 	    <fieldset>
 		<legend>Chords</legend>
 		
-		<fieldset>
+		<fieldset class="trebleStuff">
 		<legend>Treble</legend>
 		<table>
 		  <tr>
@@ -173,9 +200,9 @@
 		
 		</fieldset>
 		
-		<fieldset>
+		<fieldset class="bassStuff">
 		
-		<legend>Bass</legend>
+		<legend class="bassStuff">Bass</legend>
 		<table>
 		  <tr>
 		  
@@ -184,14 +211,15 @@
 		  </tr>
 		</table>
 		</fieldset>
+		
 		</fieldset>
 		
 		
 		<fieldset>
 		<legend>Notes</legend>
 		
-		<fieldset>
-		<legend>Treble</legend>
+		<fieldset class="trebleStuff">
+		<legend class="trebleStuff">Treble</legend>
 		<table>
 		  <tr>
 		  
@@ -231,7 +259,8 @@
 		  </tr>
 		</table>
 		</fieldset>
-		<fieldset>
+		
+		<fieldset class="bassStuff">
 		<legend>Bass</legend>
 		<table>
 		  <tr>
