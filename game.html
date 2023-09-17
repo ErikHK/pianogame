@@ -728,13 +728,17 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		
 		if(currentIndex < 4)
 		{
-		  treblevoices[0].tickables[currentIndex].setStyle({ fillStyle: 'lightgreen', strokeStyle: 'lightgreen' });
-		  bassvoices[0].tickables[currentIndex].setStyle({ fillStyle: 'lightgreen', strokeStyle: 'lightgreen' });
+		  if(USETREBLE)
+		    treblevoices[0].tickables[currentIndex].setStyle({ fillStyle: 'lightgreen', strokeStyle: 'lightgreen' });
+		  if(USEBASS)
+		    bassvoices[0].tickables[currentIndex].setStyle({ fillStyle: 'lightgreen', strokeStyle: 'lightgreen' });
 		}
 		else
 		{
-		  treblevoices[1].tickables[currentIndex - 4].setStyle({ fillStyle: 'lightgreen', strokeStyle: 'lightgreen' });
-		  bassvoices[1].tickables[currentIndex - 4].setStyle({ fillStyle: 'lightgreen', strokeStyle: 'lightgreen' });
+		  if(USETREBLE)
+		    treblevoices[1].tickables[currentIndex - 4].setStyle({ fillStyle: 'lightgreen', strokeStyle: 'lightgreen' });
+		  if(USEBASS)
+		    bassvoices[1].tickables[currentIndex - 4].setStyle({ fillStyle: 'lightgreen', strokeStyle: 'lightgreen' });
 		}
 		
 		reDraw();
@@ -750,7 +754,12 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	{
 	  console.log("SUCCESS");
 	  currentIndex = 0;
+	  
+	  if(USETREBLECHORDS)
 	  treblenotes = generateNewTrebleChords();
+	else
+	  treblenotes = generateNewTrebleNote();
+	
 	  treblevoices = generateNewTrebleVoices();
 	  reDraw();
     }
@@ -877,7 +886,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	console.log(treblenotes[0].keys);
 	
-	//bassnotes = [];
+	bassnotes = [];
 	//bassvoices = generateNewBassVoices();
 	
 	
@@ -904,9 +913,6 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
       bassvoices[1].draw(context, bassStaves[1]);
 	}
 	
-    
-
-
 
 	animate();
 
