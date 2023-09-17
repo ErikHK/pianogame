@@ -95,6 +95,10 @@
 	  background-color: #bfeeee;
 	}
 	
+	fieldset > fieldset > fieldset > fieldset {
+	  background-color: #9fdddd;
+	}
+	
 	fieldset > table {
 	  text-align: center;
 	  margin: auto;
@@ -185,8 +189,11 @@
     <div id="container">
     <div id="output2">
 	<div id="outputt">
-      <h1>Piano game!</h1>
+	
 	  <form method="get" action="game.html">
+	  
+	  <fieldset>
+      <legend><h1>Piano game!</h1></legend>
 	    
 		
 	    <fieldset>
@@ -205,13 +212,16 @@
 		
 		<fieldset class="trebleStuff">
 		<legend>Treble</legend>
+		
+		
+		  <fieldset>
 		<table>
 		  <tr>
-		  
 		  <td><span>Include chords</span><input type="checkbox" name="includetreblechords" value="" /></td>
 		  <td><span>Show chord names</span><input type="checkbox" name="showtreblechordnames" value="" /></td>
 		  </tr>
 		</table>
+		</fieldset>
 		
 		
 		<fieldset>
@@ -244,16 +254,48 @@
 		
 		</fieldset>
 		
-		<fieldset class="bassStuff">
 		
-		<legend class="bassStuff">Bass</legend>
+		<fieldset class="bassStuff">
+		<legend>Bass</legend>
+		
+		<fieldset>
 		<table>
 		  <tr>
-		  
 		  <td><span>Include chords</span><input type="checkbox" name="includebasschords" value="" /></td>
 		  <td><span>Show chord names</span><input type="checkbox" name="showbasschordnames" value="" /></td>
 		  </tr>
 		</table>
+		</fieldset>
+		
+		
+		<fieldset>
+		<legend>Chord types</legend>
+		<table>
+		
+		  <td><input type="checkbox" name="basschords" value="major" checked /><span>Major</span></td>
+		  <td><input type="checkbox" name="basschords" value="minor" /><span>Minor</span></td>
+		  <td><input type="checkbox" name="basschords" value="dim" /><span>Dim</span></td>
+		  <td><input type="checkbox" name="basschords" value="aug" /><span>Aug</span></td>
+		  <td><input type="checkbox" name="basschords" value="7" /><span>7</span></td>
+		  <td><input type="checkbox" name="basschords" value="m7" /><span>m7</span></td>
+		  <td><input type="checkbox" name="basschords" value="Maj7" /><span>Maj7</span></td>
+		  </tr>
+		</table>
+		</fieldset>
+		
+		
+		<fieldset>
+		<legend>Inversions</legend>
+		<table>
+		  <tr>
+		    <td><input type="checkbox" name="bassinversions" value="1" /><span>First</span></td>
+		    <td><input type="checkbox" name="bassinversions" value="2" /><span>Second</span></td>
+		    <td><input type="checkbox" name="bassinversions" value="3" /><span>Third</span></td>
+		    <td><input type="checkbox" name="bassinversions" value="4" /><span>Fourth</span></td>
+		  <tr>
+		  </table>
+		</fieldset>
+		
 		</fieldset>
 		
 		</fieldset>
@@ -403,7 +445,7 @@
 		  
 		  <tr>
 		  
-		  <td><input type="checkbox" name="minorkey" value="0" checked /><span>Cm</span></td>
+		  <td><input type="checkbox" name="minorkey" value="0" /><span>Cm</span></td>
 		  <td><input type="checkbox" name="minorkey" value="1" /><span>C#m</span></td>
 		  <td><input type="checkbox" name="minorkey" value="2" /><span>Dm</span></td>
 		  <td><input type="checkbox" name="minorkey" value="3" /><span>D#m</span></td>
@@ -434,61 +476,14 @@
 		  
 		  </table>
 		</fieldset>
+		
 		</fieldset>
 		
 		
-		<!--
-		<fieldset>
-		<legend>Randomize</legend>
-		
-		<fieldset>
-		<legend>Treble</legend>
-		<table>
-		  <tr>
-		  
-		  <td><span>Notes</span><input type="checkbox" name="randomizetreblenotes" value="" /></td>
-		  <td><span>Chord inversions</span><input type="checkbox" name="randomizetreblechordinv" value="" /></td>
-		  </tr>
-		</table>
-		</fieldset>
-		
-		<fieldset>
-		
-		<legend>Bass</legend>
-		<table>
-		  <tr>
-		  
-		  <td><span>Notes</span><input type="checkbox" name="includebasschords" value="" /></td>
-		  <td><span>Chord inversions</span><input type="checkbox" name="showbasschordnames" value="" /></td>
-		  </tr>
-		</table>
-		</fieldset>
-		</fieldset>
-		-->
-		
-		<!--
-		<fieldset>
-		  <legend>Randomization</legend>
-		  <ul>
-		  <li>Randomize:</li>
-		    <ul>
-			<li><input type="checkbox" name="randomize" /><span class="cw">Treble</span></li>
-			  <ul>
-			  <li><input type="checkbox" name="randomizetreblenotes" /><span class="cw">Notes</span></li>
-			  <li><input type="checkbox" name="randomizetreblechordinv" /><span class="cw">Chord inversions</span></li>
-			  </ul>
-            <li><input type="checkbox" /><span class="cw">Bass</span></li>
-			  <ul>
-			  <li><input type="checkbox" name="randomizebassnotes" /><span class="cw">Notes</span></li>
-			  <li><input type="checkbox" name="randomizebasschordinv" /><span class="cw">Chord inversions</span></li>
-			  </ul>
-            </ul>			
-		  
-		  </ul>
-		</fieldset>
-		-->
 		
 		<input id="submit" type="submit" value="Start game" />
+		
+		</fieldset>
 	  </form>
   
     </div>
