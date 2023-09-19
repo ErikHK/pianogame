@@ -9,6 +9,8 @@
 	  //display: flex;
 	  margin: 0;
 	  height: 100%;
+	  //background-color: #DDEAF3;
+	  background-color: #eeEAF3;
 	  }
 	  
 	svg {
@@ -56,13 +58,14 @@
 	  font-weight: bold;
 	}
 	
-	
+	/*
 	tr > td {
-	  //display: block;
+	  display: block;
 	  text-align: center;
-	  //float: left;
+	  float: left;
 	  padding: .3em;
 	}
+	*/
 	
 	td > span {
 	display: block;
@@ -76,8 +79,24 @@
 	fieldset {
 	  border-radius: 1em;
 	  margin-top: 2em;
-	  background-color: #eeffff;
+	  background-color: #fff;
 	  text-align: center;
+	  
+	  border-style: none;
+	  box-shadow: 2px 2px 0px #cacaca;
+	}
+	
+	fieldset > fieldset {
+	  border-style: 1px #000;
+	  background-color: #cffeee;
+	}
+	
+	fieldset > fieldset > fieldset {
+	  background-color: #bfeeee;
+	}
+	
+	fieldset > fieldset > fieldset > fieldset {
+	  background-color: #9fdddd;
 	}
 	
 	fieldset > table {
@@ -85,25 +104,9 @@
 	  margin: auto;
 	}
 	
-	
-	td {
-		text-align: center;
-	
-	}
-	
-	tr > td {
-	  text-align: center;
-	  //border: 1px solid;
-	}
-	
 	td > input {
 	  width: 2em;
 	  height: 2em;
-	}
-	
-	.number {
-	  width: 100%;
-	  height: 100%;
 	}
 	
 	li > input {
@@ -131,27 +134,63 @@
 	  display: inline;
 	}
 	
+	
+	legend {
+	  font: bold 20px sans-serif;
+	  color: #333;
+	}
+	
+	tr > td {
+	  padding: .3em;
+	}
+	
+	.keylist > tr > td {
+	  border: 1px solid black;
+	  width: 2em;
+	}
+	
+	.number {
+	  width: 90%;
+	  height: 100%;
+	}
+	
+	.oct {
+	  width: 3em;
+	  height: 100%;
+	}
+	
+	td {
+	  //border: 1px solid black;
+	}
+	
   </style>
   <title>Piano Game Scales</title>
   <body id="bod">
     <div id="container">
     <div id="output2">
 	<div id="outputt">
-      <h1>Scales!</h1>
+	
+	
 	  <form method="get" action="scales.html">
+	  <fieldset>
+      <legend><h1>Scales!</h1></legend>
 		
 	    <fieldset>
 		<legend>Scales</legend>
 		
 		
 		<table>
-		  <tr>
-		  <td><span style="text-align: center">Repeats</span></td>
-		  <tr>
-		  
-		<td><input type="number" class="number" name="repeats" value="0" /><span> </span></td>
-		  <tr>
-		  </table>
+		
+		<tr>
+		  <td><span>Treble</span><input type="checkbox" name="treble" class="treble" value="" checked /></td>
+		  <td><span>Bass</span><input type="checkbox" name="bass" class="bass" value="" /></td>
+		</tr>
+		
+		<tr>
+		  <td colspan="2"><input type="number" class="number" name="repeats" value="0" /><span> Repeats</span></td>
+		</tr>
+		
+		</table>
 		
 		</fieldset>
 		
@@ -162,98 +201,85 @@
 		  <tr>
 		  
 		  <td><input type="checkbox" name="majorkey" value="0" checked /><span>C</span></td>
-		  <td><input type="checkbox" name="majorkey" value="1" /><span>G</span></td>
+		  <td><input type="checkbox" name="majorkey" value="1" /><span>C#</span></td>
 		  <td><input type="checkbox" name="majorkey" value="2" /><span>D</span></td>
-		  <td><input type="checkbox" name="majorkey" value="3" /><span>A</span></td>
+		  <td><input type="checkbox" name="majorkey" value="3" /><span>D#</span></td>
 		  <td><input type="checkbox" name="majorkey" value="4" /><span>E</span></td>
-		  <td><input type="checkbox" name="majorkey" value="5" /><span>B</span></td>
-		  <td><input type="checkbox" name="majorkey" value="6" /><span>Gb</span></td>
-		  <td><input type="checkbox" name="majorkey" value="7" /><span>Db</span></td>
-		  <td><input type="checkbox" name="majorkey" value="8" /><span>Ab</span></td>
-		  <td><input type="checkbox" name="majorkey" value="9" /><span>Eb</span></td>
-		  <td><input type="checkbox" name="majorkey" value="10" /><span>Bb</span></td>
-		  <td><input type="checkbox" name="majorkey" value="11" /><span>F</span></td>
+		  <td><input type="checkbox" name="majorkey" value="5" /><span>F</span></td>
+		  <td><input type="checkbox" name="majorkey" value="6" /><span>F#</span></td>
+		  <td><input type="checkbox" name="majorkey" value="7" /><span>G</span></td>
+		  <td><input type="checkbox" name="majorkey" value="8" /><span>G#</span></td>
+		  <td><input type="checkbox" name="majorkey" value="9" /><span>A</span></td>
+		  <td><input type="checkbox" name="majorkey" value="10" /><span>A#</span></td>
+		  <td><input type="checkbox" name="majorkey" value="11" /><span>B</span></td>
 		  </tr>
+		  
+		  <tr>
+		  
+		  <td></td>
+		  <td><input type="checkbox" name="majorkey" value="12" /><span>Db</span></td>
+		  <td></td>
+		  <td><input type="checkbox" name="majorkey" value="13" /><span>Eb</span></td>
+		  <td></td>
+		  <td></td>
+		  <td><input type="checkbox" name="majorkey" value="14" /><span>Gb</span></td>
+		  <td></td>
+		  <td><input type="checkbox" name="majorkey" value="15" /><span>Ab</span></td>
+		  <td></td>
+		  <td><input type="checkbox" name="majorkey" value="16" /><span>Bb</span></td>
+		  <td></td>
+		  </tr>
+		  
 		  </table>
 		</fieldset>
 		
 		<fieldset>
 		  <legend>Minor keys</legend>
 		  <table class="keylist">
+		  
 		  <tr>
 		  
-		  <td><input type="checkbox" name="minorkey" value="Am" /><span>Am</span></td>
-		  <td><input type="checkbox" name="minorkey" value="Em" /><span>Em</span></td>
-		  <td><input type="checkbox" name="minorkey" value="Bm" /><span>Bm</span></td>
-		  <td><input type="checkbox" name="minorkey" value="F#m" /><span>F#m</span></td>
-		  <td><input type="checkbox" name="minorkey" value="C#m" /><span>C#m</span></td>
-		  <td><input type="checkbox" name="minorkey" value="G#m" /><span>G#m</span></td>
-		  <td><input type="checkbox" name="minorkey" value="Ebm" /><span>Ebm</span></td>
-		  <td><input type="checkbox" name="minorkey" value="Bbm" /><span>Bbm</span></td>
-		  <td><input type="checkbox" name="minorkey" value="Fm" /><span>Fm</span></td>
-		  <td><input type="checkbox" name="minorkey" value="Cm" /><span>Cm</span></td>
-		  <td><input type="checkbox" name="minorkey" value="Gm" /><span>Gm</span></td>
-		  <td><input type="checkbox" name="minorkey" value="Dm" /><span>Dm</span></td>
+		  <td><input type="checkbox" name="minorkey" value="0" /><span>Cm</span></td>
+		  <td><input type="checkbox" name="minorkey" value="1" /><span>C#m</span></td>
+		  <td><input type="checkbox" name="minorkey" value="2" /><span>Dm</span></td>
+		  <td><input type="checkbox" name="minorkey" value="3" /><span>D#m</span></td>
+		  <td><input type="checkbox" name="minorkey" value="4" /><span>Em</span></td>
+		  <td><input type="checkbox" name="minorkey" value="5" /><span>Fm</span></td>
+		  <td><input type="checkbox" name="minorkey" value="6" /><span>F#m</span></td>
+		  <td><input type="checkbox" name="minorkey" value="7" /><span>Gm</span></td>
+		  <td><input type="checkbox" name="minorkey" value="8" /><span>G#m</span></td>
+		  <td><input type="checkbox" name="minorkey" value="9" /><span>Am</span></td>
+		  <td><input type="checkbox" name="minorkey" value="10" /><span>A#m</span></td>
+		  <td><input type="checkbox" name="minorkey" value="11" /><span>Bm</span></td>
 		  </tr>
+		  
+		  <tr>
+		  <td></td>
+		  <td><input type="checkbox" name="minorkey" value="12" /><span>Dbm</span></td>
+		  <td></td>
+		  <td><input type="checkbox" name="minorkey" value="13" /><span>Ebm</span></td>
+		  <td></td>
+		  <td></td>
+		  <td><input type="checkbox" name="minorkey" value="14" /><span>Gbm</span></td>
+		  <td></td>
+		  <td><input type="checkbox" name="minorkey" value="15" /><span>Abm</span></td>
+		  <td></td>
+		  <td><input type="checkbox" name="minorkey" value="16" /><span>Bbm</span></td>
+		  <td></td>
+		  </tr>
+		  
 		  </table>
 		</fieldset>
 		
 		
-		<!--
-		<fieldset>
-		<legend>Randomize</legend>
-		
-		<fieldset>
-		<legend>Treble</legend>
-		<table>
-		  <tr>
-		  
-		  <td><span>Notes</span><input type="checkbox" name="randomizetreblenotes" value="" /></td>
-		  <td><span>Chord inversions</span><input type="checkbox" name="randomizetreblechordinv" value="" /></td>
-		  </tr>
-		</table>
-		</fieldset>
-		
-		<fieldset>
-		
-		<legend>Bass</legend>
-		<table>
-		  <tr>
-		  
-		  <td><span>Notes</span><input type="checkbox" name="includebasschords" value="" /></td>
-		  <td><span>Chord inversions</span><input type="checkbox" name="showbasschordnames" value="" /></td>
-		  </tr>
-		</table>
-		</fieldset>
-		</fieldset>
-		-->
-		
-		<!--
-		<fieldset>
-		  <legend>Randomization</legend>
-		  <ul>
-		  <li>Randomize:</li>
-		    <ul>
-			<li><input type="checkbox" name="randomize" /><span class="cw">Treble</span></li>
-			  <ul>
-			  <li><input type="checkbox" name="randomizetreblenotes" /><span class="cw">Notes</span></li>
-			  <li><input type="checkbox" name="randomizetreblechordinv" /><span class="cw">Chord inversions</span></li>
-			  </ul>
-            <li><input type="checkbox" /><span class="cw">Bass</span></li>
-			  <ul>
-			  <li><input type="checkbox" name="randomizebassnotes" /><span class="cw">Notes</span></li>
-			  <li><input type="checkbox" name="randomizebasschordinv" /><span class="cw">Chord inversions</span></li>
-			  </ul>
-            </ul>			
-		  
-		  </ul>
-		</fieldset>
-		-->
 		
 		<input id="submit" type="submit" value="Start game" />
+		
+	</fieldset>
 	  </form>
   
     </div>
+	
 	</div>
 	</div>
 	

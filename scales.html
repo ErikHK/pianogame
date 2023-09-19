@@ -205,21 +205,42 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	  console.log(Tonal.Scale.get("C major") );
 	  let notes = Tonal.Scale.get(scale).notes;
-	  notes = notes.concat(notes.slice().reverse());
+	  //notes = notes.concat(notes.slice().reverse());
 	  
-	  let staveNotes = [];
+	  let notesWOct = [];
+	  
+	  let currOctave = octave;
 	  
 	  for(let i=0; i < notes.length; i++)
 	  {
+	    if(notes[i] == 'C' && i != 0)
+		  currOctave += 1;
+		  
+		notesWOct.push(notes[i] + "/" + currOctave);
+	  }
+	  
+	  notesWOct = notesWOct.concat(notesWOct.slice().reverse());
+	  
+	  
+	  let staveNotes = [];
+	  
+	  for(let i=0; i < notesWOct.length; i++)
+	  {
+	    
 	    let staveNote = new StaveNote({
 			  clef: clef,
-			  keys: [notes[i] + "/" + octave],
+			  keys: [notesWOct[i]],
 			  duration: 'q',
 			});
 			
 		staveNote.success = false;
 		staveNotes.push(staveNote);
+		
 	  }
+	  
+	  //let staveNotes2 = staveNotes.slice();
+	  
+	  //staveNotes2.push(staveNotes[0]);
 	  
 	  return staveNotes;
 	}
@@ -342,8 +363,8 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
     trebleStave.addClef('treble').addTimeSignature('4/4');
 	  
 	//bassStave.addClef('bass').addTimeSignature('4/4');
-	  
-	trebleStave.addKeySignature('C');
+	
+	trebleStave.addKeySignature(currentKey);
 
 	//bassStave.addKeySignature('C');
 	  
@@ -396,7 +417,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	//initialize everything etc
 	
-	trebleNotes = generateNewScale('C major', 4, 'treble');	
+	trebleNotes = generateNewScale(currentKey + " major", 4, 'treble');	
 	  
 	trebleVoice = generateNewTrebleVoice();
 
