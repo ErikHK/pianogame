@@ -124,12 +124,11 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	let currentIndex = 0;
 	
-	//let allTonicsCircleOfFifths = "C G D A E B Gb Db Ab Eb Bb F".split(" ");
-	let allTonics = "C C# D D# E F F# G G# A A# B Db Eb Gb Ab Bb".split(" ");
+	let allTonicsCircleOfFifths = "C G D A E B F# C# Ab Eb Bb F Cb Gb Db".split(" ");
 	
 	let keyKey = MAJORKEYS[Math.random() * MAJORKEYS.length | 0];
 		
-	let currentKey = allTonics[keyKey];
+	let currentKey = allTonicsCircleOfFifths[keyKey];
 	
 	
 	let currentKeyAccidentals = CNotesAccidentals;
@@ -213,7 +212,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  
 	  for(let i=0; i < notes.length; i++)
 	  {
-	    if(notes[i] == 'C' && i != 0)
+	    if(notes[i] == 'C' || notes[i] == 'C#' && i != 0)
 		  currOctave += 1;
 		  
 		notesWOct.push(notes[i] + "/" + currOctave);
