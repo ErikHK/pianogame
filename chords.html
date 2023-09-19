@@ -213,7 +213,14 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	let currentChordNotes = [];
 	let currentRootNote = "";
 	let currentChordName = "";
-	let currentKeySignature = "C";
+	//let currentKey = "C";
+	
+	
+	let allTonicsCircleOfFifths = "C G D A E B F# C# Ab Eb Bb F Cb Gb Db".split(" ");
+	
+	let keyKey = MAJORKEYS[Math.random() * MAJORKEYS.length | 0];
+		
+	let currentKey = allTonicsCircleOfFifths[keyKey];
 	
 	
     let trebleStave = new Stave(25, 20, 400);
@@ -274,7 +281,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		//select random key
 		let keyKey = MAJORKEYS[Math.random() * MAJORKEYS.length | 0];
 		
-		currentKeySignature = allChordsCircleOfFifths[keyKey][0];
+	    currentKey = allTonicsCircleOfFifths[keyKey];
 		
 		let keyChord = randInt(0, 5);
 		
@@ -285,13 +292,13 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 			keyChord = 6;
 		
 		//let chord = allChordsCircleOfFifths[keyKey][keyChord];
-		console.log("testa", keyKey, Tonal.Key.majorKey(currentKeySignature));
-		let chord = Tonal.Key.majorKey(currentKeySignature).triads[keyChord];
+		console.log("testa", keyKey, Tonal.Key.majorKey(currentKey));
+		let chord = Tonal.Key.majorKey(currentKey).triads[keyChord];
 		
 		console.log("hehehe chord types", CHORDTYPES);
 		
 		
-		let allChords = Tonal.Key.majorKey(currentKeySignature).chords;
+		let allChords = Tonal.Key.majorKey(currentKey).chords;
 		
 		
 		
@@ -305,17 +312,17 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 			chordindices = [1, 2, 5];
 		else if(CHORDTYPE == "major")
 		{
-			allChords = Tonal.Key.majorKey(currentKeySignature).triads;
+			allChords = Tonal.Key.majorKey(currentKey).triads;
 			chordindices = [0, 3, 4];
 		}
 		else if(CHORDTYPE == "minor")
 		{
-			allChords = Tonal.Key.majorKey(currentKeySignature).triads;
+			allChords = Tonal.Key.majorKey(currentKey).triads;
 			chordindices = [1, 2, 5];
 		}
 		else if(CHORDTYPE == "dim")
 		{
-			allChords = Tonal.Key.majorKey(currentKeySignature).triads;
+			allChords = Tonal.Key.majorKey(currentKey).triads;
 			chordindices = [6];
 		}
 		
@@ -375,9 +382,9 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		//trebleStave = new Stave(25, 20, 400);
 	    //bassStave = new Stave(25, 100, 400);
 	  
-		trebleStave.setKeySignature(currentKeySignature);
+		trebleStave.setKeySignature(currentKey);
 	  
-	    bassStave.setKeySignature(currentKeySignature);
+	    bassStave.setKeySignature(currentKey);
 
 		return [chord, chordNotes_, rootNote, chordName];
 	}
@@ -498,7 +505,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  ctx.fillText(currentChordName, 225, 50);
 	  
 	  ctx.font = "bold 20px Verdana";
-	  ctx.fillText("Key of " + currentKeySignature, 225, 85);
+	  ctx.fillText("Key of " + currentKey, 225, 85);
 	  
 	  // clear note canvas
 	  context.clearRect(0,0,450, 250);
@@ -533,9 +540,9 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  
 	  bassStave.addClef('bass');
 	  
-	  trebleStave.addKeySignature(currentKeySignature);
+	  trebleStave.addKeySignature(currentKey);
 	  
-	  bassStave.addKeySignature(currentKeySignature);
+	  bassStave.addKeySignature(currentKey);
 
 	  //bassStave.addKeySignature('A');
 	  
