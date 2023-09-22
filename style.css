@@ -69,7 +69,8 @@
 	}
 	
 	h1 {
-	text-align:center;
+	  text-align:center;
+	  margin: 0;
 	}
 	
 	fieldset {
@@ -80,6 +81,7 @@
 	  
 	  border-style: none;
 	  box-shadow: 2px 2px 0px #cacaca;
+	  margin: 2em;
 	}
 	
 	fieldset > fieldset {
