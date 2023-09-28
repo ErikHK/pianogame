@@ -11,6 +11,8 @@
   {
     showHideBass();
 	showHideTreble();
+	showHideTrebleChance();
+	showHideBassChance();
   }
   
   function showHideBass()
@@ -33,6 +35,38 @@
     
 	console.log($('.treble').is(":checked"));
   }
+  
+  function showHideTrebleChance()
+  {
+     if($('#includetreblechords').is(":checked"))   
+	 {
+      $("#treblechance").attr("disabled", false);
+	  }
+	else
+	{
+	  //$(".inputrange").hide();
+	  
+      $("#treblechance").attr("disabled", true);
+	  }
+	
+  }
+  
+  function showHideBassChance()
+  {
+     if($('#includebasschords').is(":checked"))   
+	 {
+      $("#basschance").attr("disabled", false);
+	  }
+	else
+	{
+	  //$(".inputrange").hide();
+	  
+      $("#basschance").attr("disabled", true);
+	  }
+	
+  }
+  
+  
   
   </script>
   
@@ -71,9 +105,13 @@
 		  <fieldset>
 		<table>
 		  <tr>
-		  <td><span>Include chords</span><input type="checkbox" name="includetreblechords" value="" /></td>
+		  <td><span>Include chords</span>
+				<input type="checkbox" id="includetreblechords" name="includetreblechords" value="" onchange="showHideTrebleChance()" /></td>
+		  
 		  <td><span>Show chord names</span><input type="checkbox" name="showtreblechordnames" value="" /></td>
-		  <td><span>Chord chance</span><input type="range" class="inputrange" name="treblechordchance" value="" /></td>
+		  
+		  <td><span>Chord chance</span>
+				<input type="range" id="treblechance" class="inputrange" name="treblechordchance" value="" /></td>
 		  </tr>
 		</table>
 		</fieldset>
@@ -117,9 +155,10 @@
 		<fieldset>
 		<table>
 		  <tr>
-		  <td><span>Include chords</span><input type="checkbox" name="includebasschords" value="" /></td>
+		  <td><span>Include chords</span>
+			<input type="checkbox" name="includebasschords" id="includebasschords" value="" onchange="showHideBassChance()" /></td>
 		  <td><span>Show chord names</span><input type="checkbox" name="showbasschordnames" value="" /></td>
-		  <td><span>Chord chance</span><input type="range" class="inputrange" name="basschordchance" value="" /></td>
+		  <td><span>Chord chance</span><input type="range" class="inputrange" id="basschance" name="basschordchance" value="" /></td>
 		  </tr>
 		</table>
 		</fieldset>
