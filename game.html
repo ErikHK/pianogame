@@ -125,16 +125,13 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	let currentIndex = 0;
 	
-	//let allTonicsCircleOfFifths = "C G D A E B Gb Db Ab Eb Bb F".split(" ");
-	let allTonics = "C C# D D# E F F# G G# A A# B Db Eb Gb Ab Bb".split(" ");
+	let allTonicsCircleOfFifths = "C G D A E B Gb Db Ab Eb Bb F".split(" ");
+	//let allTonics = "C C# D D# E F F# G G# A A# B Db Eb Gb Ab Bb".split(" ");
 	
 	let keyKey = MAJORKEYS[Math.random() * MAJORKEYS.length | 0];
 		
-	let currentKey = allTonics[keyKey];
+	let currentKey = allTonicsCircleOfFifths[keyKey];
 	
-	
-	let currentKeyAccidentals = CNotesAccidentals;
-	let currentKeyChords = keyOfCChords;
 	
 	function midiToNoteName(midi, octave=true) {
 	  if (isNaN(midi) || midi === -Infinity || midi === Infinity) return "";

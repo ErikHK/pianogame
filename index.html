@@ -11,8 +11,8 @@
   {
     showHideBass();
 	showHideTreble();
-	showHideTrebleChance();
-	showHideBassChance();
+	showHideTrebleChords();
+	showHideBassChords();
   }
   
   function showHideBass()
@@ -36,32 +36,39 @@
 	console.log($('.treble').is(":checked"));
   }
   
-  function showHideTrebleChance()
+  function showHideTrebleChords()
   {
      if($('#includetreblechords').is(":checked"))   
 	 {
       $("#treblechance").attr("disabled", false);
+	  $(".treblechords").attr("disabled", false);
+	  
 	  }
 	else
 	{
 	  //$(".inputrange").hide();
 	  
       $("#treblechance").attr("disabled", true);
+	  
+	  $(".treblechords").attr("disabled", true);
 	  }
 	
   }
   
-  function showHideBassChance()
+  function showHideBassChords()
   {
      if($('#includebasschords').is(":checked"))   
 	 {
       $("#basschance").attr("disabled", false);
+      $(".basschords").attr("disabled", false);
 	  }
 	else
 	{
 	  //$(".inputrange").hide();
 	  
       $("#basschance").attr("disabled", true);
+	  
+      $(".basschords").attr("disabled", true);
 	  }
 	
   }
@@ -106,9 +113,9 @@
 		<table>
 		  <tr>
 		  <td><span>Include chords</span>
-				<input type="checkbox" id="includetreblechords" name="includetreblechords" value="" onchange="showHideTrebleChance()" /></td>
+				<input type="checkbox" id="includetreblechords" name="includetreblechords" value="" onchange="showHideTrebleChords()" /></td>
 		  
-		  <td><span>Show chord names</span><input type="checkbox" name="showtreblechordnames" value="" /></td>
+		  <td><span>Show chord names</span><input type="checkbox" class="treblechords" name="showtreblechordnames" value="" /></td>
 		  
 		  <td><span>Chord chance</span>
 				<input type="range" id="treblechance" class="inputrange" name="treblechordchance" value="" /></td>
@@ -121,13 +128,13 @@
 		<legend>Chord types</legend>
 		<table>
 		
-		  <td><input type="checkbox" name="chords" value="major" checked /><span>Major</span></td>
-		  <td><input type="checkbox" name="chords" value="minor" /><span>Minor</span></td>
-		  <td><input type="checkbox" name="chords" value="dim" /><span>Dim</span></td>
-		  <td><input type="checkbox" name="chords" value="aug" /><span>Aug</span></td>
-		  <td><input type="checkbox" name="chords" value="7" /><span>7</span></td>
-		  <td><input type="checkbox" name="chords" value="m7" /><span>m7</span></td>
-		  <td><input type="checkbox" name="chords" value="Maj7" /><span>Maj7</span></td>
+		  <td><input type="checkbox" class="treblechords" name="chords" value="major" checked /><span>Major</span></td>
+		  <td><input type="checkbox" class="treblechords" name="chords" value="minor" /><span>Minor</span></td>
+		  <td><input type="checkbox" class="treblechords" name="chords" value="dim" /><span>Dim</span></td>
+		  <td><input type="checkbox" class="treblechords" name="chords" value="aug" /><span>Aug</span></td>
+		  <td><input type="checkbox" class="treblechords" name="chords" value="7" /><span>7</span></td>
+		  <td><input type="checkbox" class="treblechords" name="chords" value="m7" /><span>m7</span></td>
+		  <td><input type="checkbox" class="treblechords" name="chords" value="Maj7" /><span>Maj7</span></td>
 		  </tr>
 		</table>
 		</fieldset>
@@ -136,11 +143,11 @@
 		<legend>Inversions</legend>
 		<table>
 		  <tr>
-		    <td><input type="checkbox" name="inversions" value="0" checked /><span>Root</span></td>
-		    <td><input type="checkbox" name="inversions" value="1" /><span>First</span></td>
-		    <td><input type="checkbox" name="inversions" value="2" /><span>Second</span></td>
-		    <td><input type="checkbox" name="inversions" value="3" /><span>Third</span></td>
-		    <td><input type="checkbox" name="inversions" value="4" /><span>Fourth</span></td>
+		    <td><input type="checkbox" class="treblechords" name="inversions" value="0" checked /><span>Root</span></td>
+		    <td><input type="checkbox" class="treblechords" name="inversions" value="1" /><span>First</span></td>
+		    <td><input type="checkbox" class="treblechords" name="inversions" value="2" /><span>Second</span></td>
+		    <td><input type="checkbox" class="treblechords" name="inversions" value="3" /><span>Third</span></td>
+		    <td><input type="checkbox" class="treblechords" name="inversions" value="4" /><span>Fourth</span></td>
 		  <tr>
 		  </table>
 		</fieldset>
@@ -156,8 +163,8 @@
 		<table>
 		  <tr>
 		  <td><span>Include chords</span>
-			<input type="checkbox" name="includebasschords" id="includebasschords" value="" onchange="showHideBassChance()" /></td>
-		  <td><span>Show chord names</span><input type="checkbox" name="showbasschordnames" value="" /></td>
+			<input type="checkbox" name="includebasschords" id="includebasschords" value="" onchange="showHideBassChords()" /></td>
+		  <td><span>Show chord names</span><input type="checkbox" class="basschords" name="showbasschordnames" value="" /></td>
 		  <td><span>Chord chance</span><input type="range" class="inputrange" id="basschance" name="basschordchance" value="" /></td>
 		  </tr>
 		</table>
@@ -168,13 +175,13 @@
 		<legend>Chord types</legend>
 		<table>
 		
-		  <td><input type="checkbox" name="basschords" value="major" checked /><span>Major</span></td>
-		  <td><input type="checkbox" name="basschords" value="minor" /><span>Minor</span></td>
-		  <td><input type="checkbox" name="basschords" value="dim" /><span>Dim</span></td>
-		  <td><input type="checkbox" name="basschords" value="aug" /><span>Aug</span></td>
-		  <td><input type="checkbox" name="basschords" value="7" /><span>7</span></td>
-		  <td><input type="checkbox" name="basschords" value="m7" /><span>m7</span></td>
-		  <td><input type="checkbox" name="basschords" value="Maj7" /><span>Maj7</span></td>
+		  <td><input type="checkbox" class="basschords" name="basschords" value="major" checked /><span>Major</span></td>
+		  <td><input type="checkbox" class="basschords" name="basschords" value="minor" /><span>Minor</span></td>
+		  <td><input type="checkbox" class="basschords" name="basschords" value="dim" /><span>Dim</span></td>
+		  <td><input type="checkbox" class="basschords" name="basschords" value="aug" /><span>Aug</span></td>
+		  <td><input type="checkbox" class="basschords" name="basschords" value="7" /><span>7</span></td>
+		  <td><input type="checkbox" class="basschords" name="basschords" value="m7" /><span>m7</span></td>
+		  <td><input type="checkbox" class="basschords" name="basschords" value="Maj7" /><span>Maj7</span></td>
 		  </tr>
 		</table>
 		</fieldset>
@@ -184,11 +191,11 @@
 		<legend>Inversions</legend>
 		<table>
 		  <tr>
-		    <td><input type="checkbox" name="bassinversions" value="0" checked /><span>Root</span></td>
-		    <td><input type="checkbox" name="bassinversions" value="1" /><span>First</span></td>
-		    <td><input type="checkbox" name="bassinversions" value="2" /><span>Second</span></td>
-		    <td><input type="checkbox" name="bassinversions" value="3" /><span>Third</span></td>
-		    <td><input type="checkbox" name="bassinversions" value="4" /><span>Fourth</span></td>
+		    <td><input type="checkbox" class="basschords" name="bassinversions" value="0" checked /><span>Root</span></td>
+		    <td><input type="checkbox" class="basschords" name="bassinversions" value="1" /><span>First</span></td>
+		    <td><input type="checkbox" class="basschords" name="bassinversions" value="2" /><span>Second</span></td>
+		    <td><input type="checkbox" class="basschords" name="bassinversions" value="3" /><span>Third</span></td>
+		    <td><input type="checkbox" class="basschords" name="bassinversions" value="4" /><span>Fourth</span></td>
 		  <tr>
 		  </table>
 		</fieldset>
@@ -306,33 +313,31 @@
 		  <tr>
 		  
 		  <td><input type="checkbox" name="majorkey" value="0" checked /><span>C</span></td>
-		  <td><input type="checkbox" name="majorkey" value="1" /><span>C#</span></td>
+		  <td><input type="checkbox" name="majorkey" value="1" /><span>G</span></td>
 		  <td><input type="checkbox" name="majorkey" value="2" /><span>D</span></td>
-		  <td><input type="checkbox" name="majorkey" value="3" /><span>D#</span></td>
+		  <td><input type="checkbox" name="majorkey" value="3" /><span>A</span></td>
 		  <td><input type="checkbox" name="majorkey" value="4" /><span>E</span></td>
-		  <td><input type="checkbox" name="majorkey" value="5" /><span>F</span></td>
+		  
+		  <td><input type="checkbox" name="majorkey" value="5" /><span>B</span></td>
+		  
 		  <td><input type="checkbox" name="majorkey" value="6" /><span>F#</span></td>
-		  <td><input type="checkbox" name="majorkey" value="7" /><span>G</span></td>
-		  <td><input type="checkbox" name="majorkey" value="8" /><span>G#</span></td>
-		  <td><input type="checkbox" name="majorkey" value="9" /><span>A</span></td>
-		  <td><input type="checkbox" name="majorkey" value="10" /><span>A#</span></td>
-		  <td><input type="checkbox" name="majorkey" value="11" /><span>B</span></td>
+		  <td><input type="checkbox" name="majorkey" value="7" /><span>C#</span></td>
+		  <td><input type="checkbox" name="majorkey" value="8" /><span>Ab</span></td>
+		  <td><input type="checkbox" name="majorkey" value="9" /><span>Eb</span></td>
+		  <td><input type="checkbox" name="majorkey" value="10" /><span>Bb</span></td>
+		  <td><input type="checkbox" name="majorkey" value="11" /><span>F</span></td>
 		  </tr>
 		  
 		  <tr>
+		  <td></td>
+		  <td></td>
+		  <td></td>
+		  <td></td>
+		  <td></td>
+		  <td><input type="checkbox" name="majorkey" value="12" /><span>Cb</span></td>
+		  <td><input type="checkbox" name="majorkey" value="13" /><span>Gb</span></td>
+		  <td><input type="checkbox" name="majorkey" value="14" /><span>Db</span></td>
 		  
-		  <td></td>
-		  <td><input type="checkbox" name="majorkey" value="12" /><span>Db</span></td>
-		  <td></td>
-		  <td><input type="checkbox" name="majorkey" value="13" /><span>Eb</span></td>
-		  <td></td>
-		  <td></td>
-		  <td><input type="checkbox" name="majorkey" value="14" /><span>Gb</span></td>
-		  <td></td>
-		  <td><input type="checkbox" name="majorkey" value="15" /><span>Ab</span></td>
-		  <td></td>
-		  <td><input type="checkbox" name="majorkey" value="16" /><span>Bb</span></td>
-		  <td></td>
 		  </tr>
 		  
 		  </table>
