@@ -287,6 +287,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		
 		console.log("chordtype: ", CHORDTYPE);
 		
+		
 		if(CHORDTYPE == "dim" && Math.random() > .8)
 			//keyChord = randInt(0, 6);
 			keyChord = 6;
@@ -301,6 +302,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		let allChords = Tonal.Key.majorKey(currentKey).chords;
 		
 		
+		console.log(Tonal.Chord.get("Csus2"));
 		
 		//check if maj7 chords etc
 		if(CHORDTYPE == "Maj7")
@@ -325,6 +327,33 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 			allChords = Tonal.Key.majorKey(currentKey).triads;
 			chordindices = [6];
 		}
+		else if(CHORDTYPE == "sus2")
+		{
+			
+			let notes = Tonal.Key.majorKey(currentKey).scale;
+			
+			allChords = notes.map(function(e){ return e + "sus2" });
+			chordindices = [0, 1, 3, 4, 5];
+			
+			console.log("ALLA CHORDS dim", allChords);
+			
+			//allChords = Tonal.Key.majorKey(currentKey).triads;
+			//chordindices = [6];
+		}
+		else if(CHORDTYPE == "sus4")
+		{
+		
+			let notes = Tonal.Key.majorKey(currentKey).scale;
+			
+			allChords = notes.map(function(e){ return e + "sus4" });
+			chordindices = [0, 1, 2, 4, 5];
+			
+			console.log("ALLA CHORDS dim", allChords);
+			//allChords = Tonal.Key.majorKey(currentKey).triads;
+			//chordindices = [6];
+		}
+		
+		
 		
 		
 		//set the chord by randomly picking one from the new list
