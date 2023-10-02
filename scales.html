@@ -97,6 +97,9 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	const keyOfASChords = "A# Cm Dm D# F Gm Adim".split(" ");
 	const keyOfBChords = "B C#m D#m E F# G#m A#dim".split(" ");
 	
+	//keep track of key up
+	let keyUp = true;
+	
 	
 	const CNotes = "C D E F G A B".split(" ");
 	//const CSNotes = "C# D# F etc".split(" ");
@@ -201,9 +204,9 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
   
 	function generateNewScale(scale, octave, clef)
 	{
-	
 	  console.log(Tonal.Scale.get("C major") );
 	  let notes = Tonal.Scale.get(scale).notes;
+	  notes.push(notes[0]);
 	  //notes = notes.concat(notes.slice().reverse());
 	  
 	  let notesWOct = [];
@@ -307,7 +310,6 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	}
 	
 	
-	
 	function animate()
 	{
 	  // clear canvas
@@ -316,7 +318,11 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  //check if correct keys are held!
 	  notes = trebleNotes[currentIndex].keys;
 	
-	  if(arraysEqual(heldkeys, notes))
+	  //just check if the latest is the correct one:
+	  //heldkeys = [heldkeys[-1]];
+	  
+	  if(arraysEqual(heldkeys, notes) && keyUp)
+	  //if(heldkeys[-1] == notes[-1] && keyUp)
 	  {
 		context.fillRect(0,22,20,20);
 		trebleNotes[currentIndex].success = true;
@@ -325,14 +331,21 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		reDraw();
 		
 		currentIndex += 1;
+		keyUp = false;
 	  }
 	
-	  if(currentIndex == 8)
+	  if(currentIndex == 16)
 	  {
 	    console.log("SUCCESS");
 	    currentIndex = 0;
 	  
-	    trebleNotes = generateNewScale("C major", 4, 'treble');
+		
+		let keyKey = MAJORKEYS[Math.random() * MAJORKEYS.length | 0];
+		
+		let currentKey = allTonicsCircleOfFifths[keyKey];
+	
+		trebleNotes = generateNewScale(currentKey + " major", 4, 'treble');	
+	  
 	
 	    trebleVoice = generateNewTrebleVoice();
 	    reDraw();
@@ -407,7 +420,16 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		  
 		  //add to heldkeys
 		  if(velocity > 0 && command == 144)
+		  {
 		    heldkeys.push(keyname);
+			//keyUp = false;
+		  }
+			
+		  //set keyUp = true
+		  if(velocity == 0 && command == 144)
+			keyUp = true;
+			
+		  console.log(command, "command", velocity);
 			
 		  console.log(heldkeys);
         };
