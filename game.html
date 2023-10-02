@@ -579,6 +579,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		  let indexOfChord = Tonal.Key.majorKey(currentKey).scale.indexOf(successRootNote);
 		  let thisChord = Tonal.Key.majorKey(currentKey).triads[indexOfChord];
 		  
+		  
 		  //generate chord according to type
 		  let chordQuality = Tonal.Chord.get(thisChord).quality;
 		  
@@ -588,22 +589,34 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 							
 		  if(chordQuality == "Major")
 		  {
-			  chordNotes = [midiToNoteName(successMidiCode, false),
+			chordNotes = [midiToNoteName(successMidiCode, false),
 							midiToNoteName(successMidiCode+4, false),
 							midiToNoteName(successMidiCode+7, false)];
+			
+		  staveNoteChordNotes = [midiToNoteName(successMidiCode),
+						midiToNoteName(successMidiCode+4),
+						midiToNoteName(successMidiCode+7)];
 		  }
 		  else if(chordQuality == "Minor")
 		  {
-			  chordNotes = [midiToNoteName(successMidiCode, false),
+			chordNotes = [midiToNoteName(successMidiCode, false),
 							midiToNoteName(successMidiCode+3, false),
 							midiToNoteName(successMidiCode+7, false)];
+			
+			staveNoteChordNotes = [midiToNoteName(successMidiCode),
+						midiToNoteName(successMidiCode+3),
+						midiToNoteName(successMidiCode+7)];
 
 		  }
 		  else if(chordQuality == "Diminished")
 		  {
-			  chordNotes = [midiToNoteName(successMidiCode, false),
+			chordNotes = [midiToNoteName(successMidiCode, false),
 							midiToNoteName(successMidiCode+3, false),
 							midiToNoteName(successMidiCode+6, false)];
+			
+			staveNoteChordNotes = [midiToNoteName(successMidiCode),
+						midiToNoteName(successMidiCode+3),
+						midiToNoteName(successMidiCode+6)];
 
 		  }
 		  
@@ -611,9 +624,9 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		  
 		  //TODO: check if chord is in key!
 		  
-		  staveNoteChordNotes = [midiToNoteName(successMidiCode),
-						midiToNoteName(successMidiCode+4),
-						midiToNoteName(successMidiCode+7)];
+		  //staveNoteChordNotes = [midiToNoteName(successMidiCode),
+		  //			midiToNoteName(successMidiCode+4),
+			//			midiToNoteName(successMidiCode+7)];
 		  
 		  //randomChordNotes = ["F/4", "A/4", "C/5"];
 		  console.log("random chord notes: ", randomChord, randomChord.notes, staveNoteChordNotes, chordNotes);
@@ -629,7 +642,6 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 			  keys: staveNoteChordNotes,
 			  duration: TREBLENOTEDURATION,
 			});
-			
 			
 		  let randChance = Math.random()*100;
 		  let JUSTNOTE = false;
@@ -766,6 +778,8 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		
 	  //check if correct keys are held!
 	notes = treblenotes[currentIndex].keys;
+	
+	//console.log("notes etc", notes, heldkeys);
 	
 	if(USEBASS)
 	  notes = notes.concat(bassnotes[currentIndex].keys);

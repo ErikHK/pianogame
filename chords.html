@@ -75,7 +75,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	const CHORDTYPES = urlParams.getAll("chords");
 	
-	const CHORDTYPE = CHORDTYPES[Math.floor(Math.random() * CHORDTYPES.length)];
+	let CHORDTYPE = CHORDTYPES[Math.floor(Math.random() * CHORDTYPES.length)];
 	
 	
 	
@@ -283,9 +283,14 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		
 	    currentKey = allTonicsCircleOfFifths[keyKey];
 		
+		
+		let CHORDTYPE = CHORDTYPES[Math.floor(Math.random() * CHORDTYPES.length)];
+	
+		
 		let keyChord = randInt(0, 5);
 		
 		console.log("chordtype: ", CHORDTYPE);
+		
 		
 		
 		if(CHORDTYPE == "dim" && Math.random() > .8)
