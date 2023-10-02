@@ -98,6 +98,8 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	const keyOfASChords = "A# Cm Dm D# F Gm Adim".split(" ");
 	const keyOfBChords = "B C#m D#m E F# G#m A#dim".split(" ");
 	
+	//keep track of key up
+	let keyUp = true;
 	
 	const CNotes = "C D E F G A B".split(" ");
 	//const CSNotes = "C# D# F etc".split(" ");
@@ -784,7 +786,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	if(USEBASS)
 	  notes = notes.concat(bassnotes[currentIndex].keys);
 	  
-	if(arraysEqual(heldkeys, notes))
+	if(arraysEqual(heldkeys, notes) && keyUp)
 	{
 		context.fillRect(0,22,20,20);
 		treblenotes[currentIndex].success = true;
@@ -810,6 +812,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		console.log(treblenotes);
 		
 		currentIndex += 1;
+		keyUp = false;
 	}
 	
 	//console.log(currentIndex);
@@ -930,10 +933,15 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		  if(keyind != -1)
 		    heldkeys.splice(keyind, 1);
 			
-		  
 		  //add to heldkeys
 		  if(velocity > 0 && command == 144)
 		    heldkeys.push(keyname);
+			
+		  
+		  //set keyUp = true
+		  if(velocity == 0 && command == 144)
+			keyUp = true;
+			
 			
 		  console.log(heldkeys);
         };
