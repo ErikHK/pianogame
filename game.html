@@ -42,11 +42,35 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  height: 100%;
     }
 	
+	#buttons {
+		display: flex;
+		justify-content: center;
+		margin: 0 auto;
+		padding: 1em;
+	}
+	
+	#buttons input {
+	  margin: 1em;
+	  padding: 1em;
+	}
+	
   </style>
   <title>Piano Game</title>
   <body id="bod">
     <div id="container">
     <div id="output2"><canvas id="output"></canvas></div>
+	
+	
+	<div id="buttons">
+	<input type="button" value="C" />
+	<input type="button" value="C" />
+	<input type="button" value="C" />
+	<input type="button" value="C" />
+	<input type="button" value="C" />
+	<input type="button" value="C" />
+	<input type="button" value="C" />
+	</div>
+	
 	</div>
 	
 	<script src="vexflow.js"></script>
@@ -939,7 +963,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 			
 		  
 		  //set keyUp = true
-		  if(velocity == 0 && command == 144)
+		  if( (velocity == 0 && command == 144) || command == 128)
 			keyUp = true;
 			
 			
@@ -998,5 +1022,6 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 
 	animate();
     </script>
+	
   </body>
 </html>

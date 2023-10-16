@@ -34,6 +34,15 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  height: 100%;
     }
 	
+	#output3 {
+	  display: flex;
+	  justify-content: center;
+	  margin: 0 auto;
+	  padding: 1em;
+	  align-self: center;
+	  height: 100px;
+    }
+	
 	#output {
 	  display: flex;
 	  justify-content: center;
@@ -42,15 +51,29 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  height: 100%;
     }
 	
+	#piano {
+		display: block;
+		
+	}
+	
   </style>
   <title>Piano Game</title>
   <body id="bod">
     <div id="container">
-    <div id="output2"><canvas id="output"></canvas></div>
+	
+	<div id="output3">
+		<canvas id="piano"></canvas>
+	</div>
+	
+    <div id="output2">
+		<canvas id="output"></canvas>
+	</div>
+	
 	</div>
 	
 	<script src="vexflow.js"></script>
 	<script src="tonal.min.js"></script>
+	<script src="pianokeyboard.js"></script>
 	
     <script>
 	
@@ -61,6 +84,8 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	const NUMBARS = 2;
 	const TREBLENOTEDURATION = urlParams.get("treblenoteduration");
 	const BASSNOTEDURATION = urlParams.get("bassnoteduration");
+	
+	const OCTAVE = parseInt(urlParams.get("octave"));
 	
 	const CHORDTYPES = urlParams.getAll("chords");
 	
@@ -130,6 +155,11 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	let allTonicsCircleOfFifths = "C G D A E B F# C# Ab Eb Bb F Cb Gb Db".split(" ");
 	
 	let keyKey = MAJORKEYS[Math.random() * MAJORKEYS.length | 0];
+	
+	
+	
+	
+	let redKeysOffsets = [0, 7, 2, 9, 4, 11, 6, 1, 8, 3, 10, 5, 11, 6, 1];
 		
 	let currentKey = allTonicsCircleOfFifths[keyKey];
 	
@@ -137,19 +167,19 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	let currentKeyAccidentals = CNotesAccidentals;
 	let currentKeyChords = keyOfCChords;
 	
-	function midiToNoteName(midi, octave=true) {
+	function midiToNoteName(midi, sharps = false ) {
 	  if (isNaN(midi) || midi === -Infinity || midi === Infinity) return "";
 	  midi = Math.round(midi);
-	  const pcs = SHARPS;
+	  const pcs = sharps === true ? SHARPS : FLATS;
 	  const pc = pcs[midi % 12];
 	  //if (options.pitchClass) {
 	  //  return pc;
 	  //})
 	  const o = Math.floor(midi / 12) - 1;
 	  
-	  if(octave)
+	  //if(octave)
 	    return pc + "/" + o;
-	  return pc;
+	  //return pc;
 	}
 	
 	function arraysEqual(a, b) {
@@ -204,7 +234,6 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
   
 	function generateNewScale(scale, octave, clef)
 	{
-	  console.log(Tonal.Scale.get("C major") );
 	  let notes = Tonal.Scale.get(scale).notes;
 	  notes.push(notes[0]);
 	  //notes = notes.concat(notes.slice().reverse());
@@ -223,6 +252,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  
 	  notesWOct = notesWOct.concat(notesWOct.slice().reverse());
 	  
+	  console.log("ALLA NOTER??", notesWOct);
 	  
 	  let staveNotes = [];
 	  
@@ -313,7 +343,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	function animate()
 	{
 	  // clear canvas
-	  context.clearRect(0,20,500, 25);
+	  //context.clearRect(0,20,500, 25);
 		
 	  //check if correct keys are held!
 	  notes = trebleNotes[currentIndex].keys;
@@ -344,7 +374,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		
 		let currentKey = allTonicsCircleOfFifths[keyKey];
 	
-		trebleNotes = generateNewScale(currentKey + " major", 4, 'treble');	
+		trebleNotes = generateNewScale(currentKey + " major", OCTAVE, 'treble');	
 	  
 	
 	    trebleVoice = generateNewTrebleVoice();
@@ -358,8 +388,10 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	}
 	
      // Create a renderer and attach it to the canvas element named "output".
-    const div = document.getElementById('output');
-    const renderer = new Renderer(div, Renderer.Backends.CANVAS);
+    const canvas = document.getElementById('output'); 
+    const piano_canvas = document.getElementById('piano');
+    const renderer = new Renderer(canvas, Renderer.Backends.CANVAS);
+		
 	  
 	// Configure the rendering context.
     renderer.resize(850, 400);
@@ -367,27 +399,19 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	  
 	  
     // Create a stave of width 800 at position 10, 80 on the canvas.
-    let trebleStave = new Stave(10, 80, 800);
+    let trebleStave = new Stave(10, 20, 800);
 	  
 	let bassStave = new Stave(10, 160, 400);
 	  
     // Add a clef and time signature.
     trebleStave.addClef('treble').addTimeSignature('4/4');
-	  
-	//bassStave.addClef('bass').addTimeSignature('4/4');
 	
 	trebleStave.addKeySignature(currentKey);
 
-	//bassStave.addKeySignature('C');
-	  
-	  
 	// Connect it to the rendering context and draw!
 	  
     trebleStave.setContext(context).draw();
-      
-    //bassStave.setContext(context).draw();
-      
-	  
+    
 	  
 	if (navigator.requestMIDIAccess) {
       console.log('This browser supports WebMIDI!');
@@ -405,7 +429,12 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	    inputs[0].onmidimessage = function(m) {
           const [command, key, velocity] = m.data;
 		  
-		  let keyname = midiToNoteName(key);
+		  
+		  let keyname = midiToNoteName(key, false);
+		  
+		  //if key uses sharps!
+		  if(keyKey <= 7)
+			keyname = midiToNoteName(key, true);
 	  
           console.log(keyname);
 		  console.log(command, key, velocity);
@@ -426,7 +455,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 		  }
 			
 		  //set keyUp = true
-		  if(velocity == 0 && command == 144)
+		  if( (velocity == 0 && command == 144)  ||  command == 128)
 			keyUp = true;
 			
 		  console.log(command, "command", velocity);
@@ -438,7 +467,7 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	//initialize everything etc
 	
-	trebleNotes = generateNewScale(currentKey + " major", 4, 'treble');	
+	trebleNotes = generateNewScale(currentKey + " major", OCTAVE, 'treble');	
 	  
 	trebleVoice = generateNewTrebleVoice();
 
@@ -446,6 +475,10 @@ It is included in the VexFlow Tutorial: https://github.com/0xfe/vexflow/wiki/Tut
 	
 	trebleStave.draw();
 	trebleVoice.draw(context, trebleStave);
+	redKeysOffset = redKeysOffsets[keyKey];
+	//RedKeysA = [9, 11, 13, 14, 16, 18, 20, 21];
+	redKeys = [0, 2, 4, 5, 7, 9, 11, 12].map(function(v){ return v + redKeysOffset });
+	DrawKeyboard(piano_canvas, redKeys);
 	
 	/*
 	  bassStaves[0].draw();
